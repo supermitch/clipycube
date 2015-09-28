@@ -1,4 +1,6 @@
 import curses
+import sys
+
 
 def main_loop(screen):
     screen.addstr("Pretty text")
@@ -11,11 +13,13 @@ def main_loop(screen):
         elif c == curses.KEY_HOME:
             x = y = 0
 
+
 def main(screen):
+    curses.start_color()  # Start colour mode
+    if not curses.has_colors():
+        sys.exit('Terminal does not support colors!')
     screen.clear()
-
     main_loop(screen)
-
     screen.refresh()
 
 
