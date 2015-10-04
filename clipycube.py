@@ -28,15 +28,22 @@ class Cube(object):
 
 
 def main_loop(screen):
-    screen.addstr("Pretty text")
+    # screen.border(0)
+    # screen.box(chr(0x0bf2), chr(0x0bf2))
+    screen.addch(10, 10, chr(0x2501))
+    screen.addch(10, 11, chr(0x2501))
+    screen.addch(10, 12, chr(0x2501))
+    screen.addch(10, 13, chr(0x2513))
+    screen.addch(11, 13, chr(0x2503))
+    screen.addch(12, 13, chr(0x2503))
 
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
 
     screen.attron(curses.color_pair(1))
-    screen.addstr('\nVoila!!! In color...')
+    screen.addstr(11, 10, chr(0x255F))
     screen.attroff(curses.color_pair(1))
 
-    screen.addstr("\nMore Pretty text")
+    screen.addstr(12, 10, chr(0x255F))
     while True:
         c = screen.getch()
         if c == ord('p'):
