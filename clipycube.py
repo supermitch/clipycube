@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import curses
+import locale
 import sys
 
 
@@ -25,6 +26,8 @@ def main_loop(screen):
 
 
 def main(screen):
+    locale.setlocale(locale.LC_ALL, '')
+    code = locale.getpreferredencoding()
     curses.start_color()  # Start colour mode
     if not curses.has_colors():
         sys.exit('Terminal does not support colors!')
