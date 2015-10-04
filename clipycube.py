@@ -6,6 +6,14 @@ import sys
 
 def main_loop(screen):
     screen.addstr("Pretty text")
+
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+
+    screen.attron(curses.color_pair(1))
+    screen.addstr('\nVoila!!! In color...')
+    screen.attroff(curses.color_pair(1))
+
+    screen.addstr("\nMore Pretty text")
     while True:
         c = screen.getch()
         if c == ord('p'):
