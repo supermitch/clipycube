@@ -5,6 +5,28 @@ import locale
 import sys
 
 
+class Block(object):
+    """ One of the 26 blocks that makes up a Rubik's cube. """
+    def __init__(self):
+        self.orientation = None
+        self.faces = []
+
+
+class Cube(object):
+    """ A Rubik's cube object. """
+    def __init__(self):
+        self.generate()
+        self.scramble()
+
+    def generate(self):
+        """ Generate a new unscrambled cube. """
+        pass
+
+    def scramble(self):
+        """ Scramble our blocks. """
+        pass
+
+
 def main_loop(screen):
     screen.addstr("Pretty text")
 
