@@ -28,19 +28,12 @@ class Cube(object):
 
     def render(self, screen):
         """ Render ourself. """
-        screen.addch(10, 10, chr(0x2501))
-        screen.addch(10, 11, chr(0x2501))
-        screen.addch(10, 12, chr(0x2501))
-        screen.addch(10, 13, chr(0x2513))
-        screen.addch(11, 13, chr(0x2503))
-        screen.addch(12, 13, chr(0x2503))
-
-        screen.attron(curses.color_pair(1))
-        screen.addstr(11, 10, chr(0x255F))
-        screen.attroff(curses.color_pair(1))
-
-        screen.addstr(12, 10, chr(0x255F))
-
+        x_offset, y_offset = 10, 10
+        for row in range(6):
+            row += x_offset
+            for col in range(6):
+                col += y_offset
+                screen.addch(row, col, chr(0x2588))
 
 def main_loop(screen):
 
