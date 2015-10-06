@@ -2,6 +2,7 @@
 
 import curses
 import locale
+import random
 import sys
 
 
@@ -29,15 +30,24 @@ class Cube(object):
     def render(self, screen):
         """ Render ourself. """
         x_offset, y_offset = 10, 10
-        for row in range(6):
+        for row in range(3):
             row += x_offset
-            for col in range(6):
+            for col in range(3):
                 col += y_offset
+                screen.attron(curses.color_pair(random.randrange(1, 7)))
                 screen.addch(row, col, chr(0x2588))
+                screen.attroff(curses.color_pair(random.randrange(1, 7)))
+
 
 def main_loop(screen):
 
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
+
     screen.box()
 
     cube = Cube()  # new cube
@@ -49,8 +59,6 @@ def main_loop(screen):
             cube.render(screen)
         elif c == ord('q'):
             break  # Exit the while loop
-        else:
-            screen.addch(12, 13, chr(0x2503))
         screen.refresh()
 
 
