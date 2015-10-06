@@ -26,32 +26,39 @@ class Cube(object):
         """ Scramble our blocks. """
         pass
 
+    def render(self, screen):
+        """ Render ourself. """
+        screen.addch(10, 10, chr(0x2501))
+        screen.addch(10, 11, chr(0x2501))
+        screen.addch(10, 12, chr(0x2501))
+        screen.addch(10, 13, chr(0x2513))
+        screen.addch(11, 13, chr(0x2503))
+        screen.addch(12, 13, chr(0x2503))
+
+        screen.attron(curses.color_pair(1))
+        screen.addstr(11, 10, chr(0x255F))
+        screen.attroff(curses.color_pair(1))
+
+        screen.addstr(12, 10, chr(0x255F))
+
 
 def main_loop(screen):
-    # screen.border(0)
-    # screen.box(chr(0x0bf2), chr(0x0bf2))
-    screen.addch(10, 10, chr(0x2501))
-    screen.addch(10, 11, chr(0x2501))
-    screen.addch(10, 12, chr(0x2501))
-    screen.addch(10, 13, chr(0x2513))
-    screen.addch(11, 13, chr(0x2503))
-    screen.addch(12, 13, chr(0x2503))
 
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    screen.box()
 
-    screen.attron(curses.color_pair(1))
-    screen.addstr(11, 10, chr(0x255F))
-    screen.attroff(curses.color_pair(1))
+    cube = Cube()  # new cube
 
-    screen.addstr(12, 10, chr(0x255F))
     while True:
         c = screen.getch()
-        if c == ord('p'):
-            print('Printing document')
+        screen.clear()
+        if c == ord('r'):
+            cube.render(screen)
         elif c == ord('q'):
             break  # Exit the while loop
-        elif c == curses.KEY_HOME:
-            x = y = 0
+        else:
+            screen.addch(12, 13, chr(0x2503))
+        screen.refresh()
 
 
 def main(screen):
@@ -62,7 +69,6 @@ def main(screen):
         sys.exit('Terminal does not support colors!')
     screen.clear()
     main_loop(screen)
-    screen.refresh()
 
 
 if __name__ == '__main__':
