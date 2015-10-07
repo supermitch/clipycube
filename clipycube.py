@@ -35,7 +35,7 @@ class Cube(object):
             for col in range(3):
                 col += y_offset
                 screen.attron(curses.color_pair(random.randrange(1, 7)))
-                screen.addch(row, col, chr(0x2588))
+                screen.addch(row, col, chr(0x256A))
                 screen.attroff(curses.color_pair(random.randrange(1, 7)))
 
 
@@ -65,20 +65,22 @@ def init_colors():
 
 
 def main_loop(screen):
-
-
-    screen.box()
-
+    """
+    Run the main game loop.
+    """
+    screen.box()  # Render window frame
     cube = Cube()  # new cube
+    cube.render(screen)
 
     while True:
         c = screen.getch()
-        screen.clear()
-        if c == ord('r'):
+        if c == ord('r'):  # Redraw
+            screen.clear()
+            screen.box()
             cube.render(screen)
+            screen.refresh()
         elif c == ord('q'):
             break  # Exit the while loop
-        screen.refresh()
 
 
 def main(screen):
