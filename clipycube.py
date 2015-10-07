@@ -39,7 +39,22 @@ class Cube(object):
                 screen.attroff(curses.color_pair(random.randrange(1, 7)))
 
 
-def main_loop(screen):
+def init_colors():
+    """
+    Modify and then initialize color pairs to match an actual Rubiks cube.
+    """
+    colors = {
+        curses.COLOR_RED: 'C41E3A',
+        curses.COLOR_BLUE: '0051BA',
+        curses.COLOR_GREEN: '009E60',
+        curses.COLOR_YELLOW: 'FFD500',
+        curses.COLOR_CYAN: 'FF5800',  # Make orange
+    }
+    for key, value in colors.items():
+        r = int(value[0:2], 16) / 255 * 1000
+        g = int(value[2:4], 16) / 255 * 1000
+        b = int(value[4:6], 16) / 255 * 1000
+        curses.init_color(key, int(r), int(g), int(b))
 
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
@@ -47,6 +62,11 @@ def main_loop(screen):
     curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
     curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
+
+
+def main_loop(screen):
+
+    init_colors()
 
     screen.box()
 
