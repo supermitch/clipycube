@@ -29,13 +29,14 @@ class Cube(object):
 
     def render(self, screen):
         """ Render ourself. """
-        x_offset, y_offset = 10, 10
+        height, width = screen.getmaxyx()
+        x_offset, y_offset = int(width/2), int(height/2)
         for row in range(3):
-            row += x_offset
+            row += y_offset - 1
             for col in range(3):
-                col += y_offset
+                col += x_offset - 1
                 screen.attron(curses.color_pair(random.randrange(1, 7)))
-                screen.addch(row, col, chr(0x256A))
+                screen.addch(int(row), int(col), chr(0x2588))
                 screen.attroff(curses.color_pair(random.randrange(1, 7)))
 
 
