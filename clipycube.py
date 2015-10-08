@@ -31,22 +31,12 @@ class Cube(object):
         """ Render ourself. """
         height, width = screen.getmaxyx()
         x_offset, y_offset = int(width/2), int(height/2)
-        #for row in range(3):
-            #row += y_offset - 1
-            #for col in range(3):
-                #col += x_offset - 1
-                #screen.attron(curses.color_pair(random.randrange(1, 7)))
-                #screen.addch(int(row), int(col), chr(0x2588))
-                #screen.attroff(curses.color_pair(random.randrange(1, 7)))
-
-        for ROW in range(3):
-            for COL in range(3):
+        for row in range(3):
+            row += y_offset - 1
+            for col in range(3):
+                col += x_offset - 1
                 screen.attron(curses.color_pair(random.randrange(1, 7)))
-                for row in range(3):
-                    x = ROW * 3 + row + y_offset
-                    for col in range(3):
-                        y = COL * 3 + col + x_offset
-                        screen.addch(int(x), int(y), chr(0x2588))
+                screen.addch(int(row), int(col), chr(0x2588))
                 screen.attroff(curses.color_pair(random.randrange(1, 7)))
 
 
@@ -86,7 +76,6 @@ def main_loop(screen):
     while True:
         c = screen.getch()
         if c == ord('r'):  # Redraw
-            screen.clear()
             screen.box()
             cube.render(screen)
             screen.refresh()
@@ -104,7 +93,6 @@ def main(screen):
     else:
         init_colors()
 
-    screen.clear()
     curses.curs_set(0)  # Hide cursor
     main_loop(screen)
 
