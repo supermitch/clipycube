@@ -65,13 +65,14 @@ def init_colors():
         g = int(value[2:4], 16) / 255 * 1000
         b = int(value[4:6], 16) / 255 * 1000
         curses.init_color(key, int(r), int(g), int(b))
+        logging.info('new color: {}'.format(curses.color_content(key)))
 
-    # curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
-    # curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
-    # curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    # curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)
-    # curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-    # curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
     return old_colors
 
@@ -80,15 +81,8 @@ def reset_colors(old_colors):
     """
     Terminal colours are fubar unless we reset them!
     """
-    colors = {
-        curses.COLOR_RED: (1000, 0, 0),
-        curses.COLOR_BLUE: (0, 0, 1000),
-        curses.COLOR_GREEN: (0, 1000, 0),
-        curses.COLOR_YELLOW: (1000, 1000, 0),
-        curses.COLOR_CYAN: (0, 1000, 1000),  # Make orange
-    }
     for key, (r, g, b) in old_colors.items():
-        logging.info('old color: {}'.format('key'))
+        logging.info('{}, {}'.format(key, (r, g, b)))
         curses.init_color(key, r, g, b)
 
 
