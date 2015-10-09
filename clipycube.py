@@ -2,8 +2,15 @@
 
 import curses
 import locale
+import logging
 import random
 import sys
+
+
+logger = logging.getLogger('clipycube')
+fh = logging.FileHandler('log.log')
+fh.setLevel(logging.DEBUG)
+logger.addHandler(fh)
 
 
 class Block(object):
@@ -36,7 +43,7 @@ class Cube(object):
             for col in range(3):
                 col += x_offset - 1
                 screen.attron(curses.color_pair(random.randrange(1, 7)))
-                screen.addch(int(row), int(col), chr(0x2588))
+                screen.addch(int(row), int(col), 65)
                 screen.attroff(curses.color_pair(random.randrange(1, 7)))
 
 
@@ -44,6 +51,7 @@ def init_colors():
     """
     Modify and then initialize color pairs to match an actual Rubiks cube.
     """
+    return
     colors = {
         curses.COLOR_RED: 'C41E3A',
         curses.COLOR_BLUE: '0051BA',
