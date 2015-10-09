@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 
 import curses
+import datetime
 import locale
 import logging
 import random
 import sys
 
 
-logger = logging.getLogger('clipycube')
-fh = logging.FileHandler('log.log')
-fh.setLevel(logging.DEBUG)
-logger.addHandler(fh)
+logging.basicConfig(filename='{}.log'.format(datetime.date.today()),
+                    level=logging.DEBUG)
 
 
 class Block(object):
