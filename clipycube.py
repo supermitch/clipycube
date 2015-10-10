@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import collections
 import curses
 import datetime
 import locale
@@ -12,11 +13,14 @@ logging.basicConfig(filename='{}.log'.format(datetime.date.today()),
                     level=logging.DEBUG)
 
 
+Faces = collections.namedtuple('Faces', 'top bottom front back left right')
+
+
 class Block(object):
     """ One of the 26 blocks that makes up a Rubik's cube. """
     def __init__(self):
         self.orientation = None
-        self.faces = []
+        self.faces = None
 
 
 class Cube(object):
@@ -27,6 +31,8 @@ class Cube(object):
 
     def generate(self):
         """ Generate a new unscrambled cube. """
+        self.blocks = [[[Block() for z in range(3)] for y in range(3)] for x in range(3)]
+        print(self.blocks)
         pass
 
     def scramble(self):
