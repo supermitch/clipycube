@@ -36,24 +36,26 @@ class Cube(object):
                  'back': 'orange', 'left': 'green', 'right': 'blue'}[face]
         return [[color for y in range(3)] for x in range(3)]
 
-    def rotate_cube(self, axis, direction):
+    def rotate_cube(self, axis, sign):
         """
         Rotate the entire cube to a new view.
-
-        `vector` is one of (1, 0), (-1, 0), (0, 1), (0, -1), which are
-        rotations about x and y axes.
         """
-        R = {'x': [[1, 0, 0],
-                   [0, math.cos, -1 * math.sin],
-                   [0, math.sin, math.cos]],
-             'y': [[math.cos, 0, math.sin],
-                   [0, 1, 0],
-                   [-1 * math.sin, 0, math.cos]],
-             'z': [[math.cos, -math.sin, 0],
-                   [math.sin, math.cos, 0],
-                   [0, 0, 1]]
-        }[axis]
-        return R(direction * 90) * vector
+        def Rx(x, y, z, theta):
+            return (1 * x + 0 * y + 0 * z,
+                    0 * x + math.cos(theta) * y - math.sin(theta) * z,
+                    0 * x + math.sin(theta) * y + math.cos(theta) * z)
+        def Ry(x, y, z, theta):
+            return (math.cos(theta) * x + 0 * y + math.sin(theta) * z,
+                    0 * x + 1 * y + 0* z,
+                    -math.sin(theta) * x + 0 * y + math.cos(theta) * z)
+        def Rz(x, y, z, theta):
+            return (math.cos(theta) * x - math.sin(theta) * y + 0 * z,
+                    math.sin(theta) * x + math.cos(theta) * y + 0 * z,
+                    0 * x + 0 * y + 1 * z)
+        R = {'x': Rx, 'y': Ry, 'z': Rz}[axis]  # Select a rotation matrix
+        theta = math.pi / 2 * sign  # Always 90 degrees
+        x, y, z = self.vector
+        return R(x, y, z, theta)  # Calculate our new vector
 
     def scramble(self):
         """ Scramble our faces. """
