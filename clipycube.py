@@ -13,16 +13,6 @@ logging.basicConfig(filename='{}.log'.format(datetime.date.today()),
                     level=logging.DEBUG)
 
 
-Faces = collections.namedtuple('Faces', 'top bottom front back left right')
-
-
-class Block(object):
-    """ One of the 26 blocks that makes up a Rubik's cube. """
-    def __init__(self):
-        self.orientation = None
-        self.faces = None
-
-
 class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
@@ -30,13 +20,28 @@ class Cube(object):
         self.scramble()
 
     def generate(self):
-        """ Generate a new unscrambled cube. """
-        self.blocks = [[[Block() for z in range(3)] for y in range(3)] for x in range(3)]
-        print(self.blocks)
-        pass
+        """
+        Generate our six faces, e.g. self.top.
+        """
+        for face in ('top', 'bottom', 'front', 'back', 'left', 'right'):
+            setattr(self, face, self._gen_face(face))
+
+    def _gen_face(self, orientation):
+        """
+        Create faces, which are 3 x 3 arrays of stickers.
+        """
+        color = {  # Rubiks cubes color layout is predefined!
+            'top': 'white',
+            'bottom': 'yellow',
+            'front': 'red',
+            'back': 'orange',
+            'left': 'green',
+            'right': 'blue'
+        }[orientation]
+        return [[color for y in range(3)] for x in range(3)]
 
     def scramble(self):
-        """ Scramble our blocks. """
+        """ Scramble our faces. """
         pass
 
     def render(self, screen):
