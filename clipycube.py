@@ -41,17 +41,17 @@ class Cube(object):
         Rotate the entire cube to a new view.
         """
         def Rx(x, y, z, theta):
-            return (1 * x + 0 * y + 0 * z,
-                    0 * x + math.cos(theta) * y - math.sin(theta) * z,
-                    0 * x + math.sin(theta) * y + math.cos(theta) * z)
+            return (x,
+                    math.cos(theta) * y - math.sin(theta) * z,
+                    math.sin(theta) * y + math.cos(theta) * z)
         def Ry(x, y, z, theta):
-            return (math.cos(theta) * x + 0 * y + math.sin(theta) * z,
-                    0 * x + 1 * y + 0* z,
-                    -math.sin(theta) * x + 0 * y + math.cos(theta) * z)
+            return (math.cos(theta) * x + math.sin(theta) * z,
+                    y,
+                    -math.sin(theta) * x + math.cos(theta) * z)
         def Rz(x, y, z, theta):
-            return (math.cos(theta) * x - math.sin(theta) * y + 0 * z,
-                    math.sin(theta) * x + math.cos(theta) * y + 0 * z,
-                    0 * x + 0 * y + 1 * z)
+            return (math.cos(theta) * x - math.sin(theta) * y,
+                    math.sin(theta) * x + math.cos(theta) * y,
+                    z)
         R = {'x': Rx, 'y': Ry, 'z': Rz}[axis]  # Select a rotation matrix
         theta = math.pi / 2 * sign  # Always 90 degrees
         x, y, z = self.vector
