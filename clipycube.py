@@ -41,8 +41,9 @@ class Cube(object):
             row += y_offset - 1
             for col in range(3):
                 col += x_offset - 1
+                x = chr(0x2588)  # Python 3 only?
                 screen.attron(curses.color_pair(random.randrange(1, 7)))
-                screen.addch(int(row), int(col), 65)
+                screen.addch(int(row), int(col), x)
                 screen.attroff(curses.color_pair(random.randrange(1, 7)))
 
 
