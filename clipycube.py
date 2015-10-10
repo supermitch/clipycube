@@ -5,6 +5,7 @@ import curses
 import datetime
 import locale
 import logging
+import math
 import random
 import sys
 
@@ -16,6 +17,9 @@ logging.basicConfig(filename='{}.log'.format(datetime.date.today()),
 class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
+        self.face_labels = ('top', 'bottom', 'front', 'back', 'left', 'right')
+        self.view = 'front'
+        self.vector = (0, 0, 1)  # Positive z-axis is 'front'
         self.generate()
         self.scramble()
         self.describe()
@@ -31,6 +35,25 @@ class Cube(object):
         color = {'top': 'white', 'bottom': 'yellow', 'front': 'red',
                  'back': 'orange', 'left': 'green', 'right': 'blue'}[face]
         return [[color for y in range(3)] for x in range(3)]
+
+    def rotate_cube(self, axis, direction):
+        """
+        Rotate the entire cube to a new view.
+
+        `vector` is one of (1, 0), (-1, 0), (0, 1), (0, -1), which are
+        rotations about x and y axes.
+        """
+        R = {'x': [[1, 0, 0],
+                   [0, math.cos, -1 * math.sin],
+                   [0, math.sin, math.cos]],
+             'y': [[math.cos, 0, math.sin],
+                   [0, 1, 0],
+                   [-1 * math.sin, 0, math.cos]],
+             'z': [[math.cos, -math.sin, 0],
+                   [math.sin, math.cos, 0],
+                   [0, 0, 1]]
+        }[axis]
+        return R(direction * 90) * vector
 
     def scramble(self):
         """ Scramble our faces. """
