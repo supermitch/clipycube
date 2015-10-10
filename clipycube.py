@@ -18,18 +18,15 @@ class Cube(object):
     def __init__(self):
         self.generate()
         self.scramble()
-        self.printer()
+        self.describe()
+        self.show()
 
     def generate(self):
-        """
-        Generate our six faces, e.g. self.top.
-        """
-        self.faces = {face: self._gen_face(face) for face in ('top', 'bottom', 'front', 'back', 'left', 'right')}
+        """ Generate our six faces, e.g. self.top. """
+        self.faces = {face: self._gen_face(face) for face in self.face_labels}
 
     def _gen_face(self, face):
-        """
-        Create faces, which are 3 x 3 arrays of stickers.
-        """
+        """ Create faces, which are 3 x 3 arrays of stickers. """
         # Rubiks cubes color layout is predefined!
         color = {'top': 'white', 'bottom': 'yellow', 'front': 'red',
                  'back': 'orange', 'left': 'green', 'right': 'blue'}[face]
@@ -39,9 +36,14 @@ class Cube(object):
         """ Scramble our faces. """
         pass
 
-    def printer(self):
+    def describe(self):
+        """ Describe the cube's current layout. """
         for name, face in self.faces.items():
             print(name, face)
+
+    def show(self):
+        """ Print the currently displayed face. """
+        print(self.view, self.faces[self.view])
 
     def render(self, screen):
         """ Render ourself. """
