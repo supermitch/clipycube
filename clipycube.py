@@ -51,11 +51,11 @@ def init_colors():
     Modify and then initialize color pairs to match an actual Rubiks cube.
     """
     colors = {
-        curses.COLOR_RED: 'C41E3A',
-        curses.COLOR_BLUE: '0051BA',
-        curses.COLOR_GREEN: '009E60',
-        curses.COLOR_YELLOW: 'FFD500',
-        curses.COLOR_CYAN: 'FF5800',  # Make orange
+        20: 'C41E3A',
+        21: '0051BA',
+        22: '009E60',
+        23: 'FFD500',
+        24: 'FF5800',  # Make orange
     }
     old_colors = {}
     for key, value in colors.items():
@@ -67,12 +67,12 @@ def init_colors():
         curses.init_color(key, int(r), int(g), int(b))
         logging.info('new color: {}'.format(curses.color_content(key)))
 
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)
-    curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-    curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(1, 20, -1)
+    curses.init_pair(2, 21, -1)
+    curses.init_pair(3, 22, -1)
+    curses.init_pair(4, curses.COLOR_WHITE, -1)
+    curses.init_pair(5, 23, -1)
+    curses.init_pair(6, 24, -1)
 
     return old_colors
 
@@ -108,6 +108,7 @@ def main(screen):
     locale.setlocale(locale.LC_ALL, '')
     code = locale.getpreferredencoding()
 
+    curses.use_default_colors()
     curses.start_color()  # Start colour mode
     if not curses.has_colors():
         sys.exit('Terminal does not support colors!')
