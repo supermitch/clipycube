@@ -111,6 +111,12 @@ def main_loop(screen):
             break  # Exit the while loop
 
 
+def game():
+    """
+    """
+    cube = Cube()  # new cube
+
+
 def main(screen):
     locale.setlocale(locale.LC_ALL, '')
     code = locale.getpreferredencoding()
@@ -131,5 +137,8 @@ def main(screen):
 
 
 if __name__ == '__main__':
-    curses.wrapper(main)
+    if len(sys.argv) > 1 and sys.argv[1] == 'ui':
+        curses.wrapper(main)
+    else:
+        game()
 
