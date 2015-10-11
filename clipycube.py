@@ -18,12 +18,9 @@ class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
         self.face_labels = ('top', 'bottom', 'front', 'back', 'left', 'right')
-        self.view = 'front'
         self.vector = (0, 0, 1)  # Positive z-axis is 'front'
         self.generate()
         self.scramble()
-        self.describe()
-        self.show()
 
     def generate(self):
         """ Generate our six faces, e.g. self.top. """
@@ -36,7 +33,7 @@ class Cube(object):
                  'back': 'orange', 'left': 'green', 'right': 'blue'}[face]
         return [[color for y in range(3)] for x in range(3)]
 
-    def rotate_cube(self, axis, sign):
+    def rotate_vector(self, axis, sign=1):
         """
         Rotate the entire cube to a new view.
         """
@@ -53,9 +50,28 @@ class Cube(object):
                     math.sin(theta) * x + math.cos(theta) * y,
                     z)
         R = {'x': Rx, 'y': Ry, 'z': Rz}[axis]  # Select a rotation matrix
-        theta = math.pi / 2 * sign  # Always 90 degrees
+        theta = sign * math.pi / 2  # Always 90 degrees
         x, y, z = self.vector
         return R(x, y, z, theta)  # Calculate our new vector
+
+    def rotate(self, axis, sign=1):
+        """
+        Reorient our facing vector by rotation about an axis, and adjust
+        our 'view' attribute accordingly.
+        """
+        self.vector = self.rotate_vector('y', sign=sign)
+
+    @property
+    def view(self):
+        """ Return our facing view, given our facing vector. """
+        return {
+            (0, 0, 1): 'front',
+            (1, 0, 0): 'right',
+            (0, 1, 0): 'top',
+            (0, 0, -1): 'back',
+            (-1, 0, 0): 'left',
+            (0, -1, 0): 'bottom',
+        }.get(self.vector, None)
 
     def scramble(self):
         """ Scramble our faces. """
@@ -146,6 +162,13 @@ def game():
     """
     """
     cube = Cube()  # new cube
+    print(cube.vector)
+    print(cube.view)
+    cube.show()
+    cube.rotate('y')
+    print(cube.vector)
+    print(cube.view)
+    cube.show()
 
 
 def main(screen):
