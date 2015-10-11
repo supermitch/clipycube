@@ -59,7 +59,7 @@ class Cube(object):
         Reorient our facing vector by rotation about an axis, and adjust
         our 'view' attribute accordingly.
         """
-        self.vector = self.rotate_vector('y', sign=sign)
+        self.vector = self.rotate_vector(axis, sign=sign)
 
     @property
     def view(self):
