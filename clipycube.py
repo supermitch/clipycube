@@ -10,7 +10,7 @@ import random
 import sys
 
 
-logging.basicConfig(filename='{}.log'.format(datetime.date.today()),
+logging.basicConfig(filename='log/{}.log'.format(datetime.date.today()),
                     level=logging.DEBUG)
 
 
