@@ -88,16 +88,20 @@ class Cube(object):
 
     def render(self, screen):
         """ Render ourself. """
+        colors = ('red', 'green', 'blue', 'white', 'yellow', 'orange')
+        face = self.faces[self.view]
+
         height, width = screen.getmaxyx()
         x_offset, y_offset = int(width/2), int(height/2)
-        for row in range(3):
-            row += y_offset - 1
-            for col in range(3):
-                col += x_offset - 1
-                x = chr(0x2588)  # Python 3 only?
-                screen.attron(curses.color_pair(random.randrange(1, 7)))
-                screen.addch(int(row), int(col), x)
-                screen.attroff(curses.color_pair(random.randrange(1, 7)))
+
+        for i, row in enumerate(face):
+            i += y_offset - 1
+            for j, sticker in enumerate(row):
+                j += x_offset - 1
+                block = chr(0x2588)  # Python 3 only?
+                screen.attron(colors.index(sticker) + 1)
+                screen.addch(int(i), int(j), block)
+                screen.attroff(colors.index(sticker) + 1)
 
 
 def init_colors():
@@ -105,11 +109,11 @@ def init_colors():
     Modify and then initialize color pairs to match an actual Rubiks cube.
     """
     colors = {
-        20: 'C41E3A',
-        21: '0051BA',
-        22: '009E60',
-        23: 'FFD500',
-        24: 'FF5800',  # Make orange
+        20: 'C41E3A',  # red
+        21: '0051BA',  # green
+        22: '009E60',  # blue
+        23: 'FFD500',  # yellow
+        24: 'FF5800',  # orange
     }
     old_colors = {}
     for key, value in colors.items():
@@ -121,12 +125,12 @@ def init_colors():
         curses.init_color(key, int(r), int(g), int(b))
         logging.info('new color: {}'.format(curses.color_content(key)))
 
-    curses.init_pair(1, 20, -1)
-    curses.init_pair(2, 21, -1)
-    curses.init_pair(3, 22, -1)
-    curses.init_pair(4, curses.COLOR_WHITE, -1)
-    curses.init_pair(5, 23, -1)
-    curses.init_pair(6, 24, -1)
+    curses.init_pair(1, 20, -1)  # red
+    curses.init_pair(2, 21, -1)  # green
+    curses.init_pair(3, 22, -1)  # blue
+    curses.init_pair(4, curses.COLOR_WHITE, -1)  # white
+    curses.init_pair(5, 23, -1)  # yellow
+    curses.init_pair(6, 24, -1)  # orange
 
     return old_colors
 
@@ -165,7 +169,7 @@ def game():
     print(cube.vector)
     print(cube.view)
     cube.show()
-    cube.rotate('y')
+    cube.rotate('x')
     print(cube.vector)
     print(cube.view)
     cube.show()
