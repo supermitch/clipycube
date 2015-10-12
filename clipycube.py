@@ -13,10 +13,22 @@ import sys
 logging.basicConfig(filename='log/clipycube.log', level=logging.DEBUG)
 
 
+# Faces
+TOP = 'top'
+BOTTOM = 'bottom'
+FRONT = 'front'
+BACK = 'back'
+LEFT = 'left'
+RIGHT = 'right'
+
+# Twist planes
+MIDDLE = 'middle'
+CENTER = 'center'
+
 class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
-        self.face_labels = ('top', 'bottom', 'front', 'back', 'left', 'right')
+        self.face_labels = (TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT)
         self.vector = (0, 0, 1)  # Positive z-axis is 'front'
         self.generate()
         self.scramble()
@@ -28,8 +40,8 @@ class Cube(object):
     def _gen_face(self, face):
         """ Create faces, which are 3 x 3 arrays of stickers. """
         # Rubiks cubes color layout is predefined!
-        color = {'top': 'white', 'bottom': 'yellow', 'front': 'red',
-                 'back': 'orange', 'left': 'green', 'right': 'blue'}[face]
+        color = {TOP: 'white', BOTTOM: 'yellow', FRONT: 'red',
+                 BACK: 'orange', LEFT: 'green', RIGHT: 'blue'}[face]
         return [[color for y in range(3)] for x in range(3)]
 
     def rotate_vector(self, axis, sign=1):
@@ -70,12 +82,12 @@ class Cube(object):
     def view(self):
         """ Return our facing view, given our facing vector. """
         return {
-            (0, 0, 1): 'front',
-            (1, 0, 0): 'right',
-            (0, 1, 0): 'top',
-            (0, 0, -1): 'back',
-            (-1, 0, 0): 'left',
-            (0, -1, 0): 'bottom',
+            (0, 0, 1): FRONT,
+            (1, 0, 0): RIGHT,
+            (0, 1, 0): TOP,
+            (0, 0, -1): BACK,
+            (-1, 0, 0): LEFT,
+            (0, -1, 0): BOTTOM,
         }.get(self.vector, None)
 
     def scramble(self):
@@ -168,17 +180,17 @@ def main_loop(screen):
         elif c == ord('z'):  # Rotate about z-axis
             cube.rotate('z')  # TODO: How does this work?
         elif c == ord('j'):
-            cube.twist('top')
+            cube.twist(TOP)
         elif c == ord('i'):
-            cube.twist('middle')  # horizontal
+            cube.twist(MIDDLE)  # horizontal
         elif c == ord('k'):
-            cube.twist('bottom')
+            cube.twist(BOTTOM)
         elif c == ord('h'):
-            cube.twist('left')
+            cube.twist(LEFT)
         elif c == ord('m'):
-            cube.twist('center')  # vertical
+            cube.twist(CENTER)  # vertical
         elif c == ord('l'):
-            cube.twist('right')
+            cube.twist(RIGHT)
         elif c == ord('q'):
             break  # Exit the while loop
         screen.box()
