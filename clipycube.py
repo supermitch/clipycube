@@ -61,6 +61,12 @@ class Cube(object):
         """
         self.vector = self.rotate_vector(axis, sign=sign)
 
+    def twist(self, direction):
+        """
+        Spin a face of the cube.
+        """
+        pass
+
     @property
     def view(self):
         """ Return our facing view, given our facing vector. """
@@ -162,6 +168,18 @@ def main_loop(screen):
             cube.rotate('y')
         elif c == ord('z'):  # Rotate about z-axis
             cube.rotate('z')  # TODO: How does this work?
+        elif c == ord('j'):
+            cube.twist('top')
+        elif c == ord('i'):
+            cube.twist('middle')  # horizontal
+        elif c == ord('k'):
+            cube.twist('bottom')
+        elif c == ord('h'):
+            cube.twist('left')
+        elif c == ord('m'):
+            cube.twist('center')  # vertical
+        elif c == ord('l'):
+            cube.twist('right')
         elif c == ord('q'):
             break  # Exit the while loop
         screen.box()
