@@ -156,12 +156,17 @@ def main_loop(screen):
 
     while True:
         c = screen.getch()
-        if c == ord('r'):  # Redraw
-            screen.box()
-            cube.render(screen)
-            screen.refresh()
+        if c == ord('x'):  # Rotate about x-axis
+            cube.rotate('x')
+        elif c == ord('y'):  # Rotate about y-axis
+            cube.rotate('y')
+        elif c == ord('z'):  # Rotate about z-axis
+            cube.rotate('z')  # TODO: How does this work?
         elif c == ord('q'):
             break  # Exit the while loop
+        screen.box()
+        cube.render(screen)
+        screen.refresh()
 
 
 def game():
