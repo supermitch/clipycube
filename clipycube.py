@@ -10,8 +10,7 @@ import random
 import sys
 
 
-logging.basicConfig(filename='log/{}.log'.format(datetime.date.today()),
-                    level=logging.DEBUG)
+logging.basicConfig(filename='log/clipycube.log', level=logging.DEBUG)
 
 
 class Cube(object):
