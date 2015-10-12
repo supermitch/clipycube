@@ -99,9 +99,11 @@ class Cube(object):
             for j, sticker in enumerate(row):
                 j += x_offset - 1
                 block = chr(0x2588)  # Python 3 only?
-                screen.attron(colors.index(sticker) + 1)
+                pair_number = colors.index(sticker) + 1
+                logging.debug('pair_number: {}'.format(pair_number))
+                screen.attron(curses.color_pair(pair_number))
                 screen.addch(int(i), int(j), block)
-                screen.attroff(colors.index(sticker) + 1)
+                screen.attroff(curses.color_pair(pair_number))
 
 
 def init_colors():
