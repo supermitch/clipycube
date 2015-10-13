@@ -24,25 +24,62 @@ RIGHT = 'right'
 # Twist planes
 MIDDLE = 'middle'
 CENTER = 'center'
+# Also TOP, BOTTOM, LEFT & RIGHT
+
+
+class Sticker(object):
+    """ A block's sticker object. """
+    def __init__(self, color, vector):
+        self.vector = vector
+        self.color = color
+
+    @property
+    def is_visible(self, vector):
+        """ Is this sticker visible along a given vector. """
+        return self.vector == vector
+
+
+class Block(object):
+    """ One of the 26 blocks that comprise a Rubiks cube. """
+    def __init__(self, x, y, z):
+        self.coords = x, y, z
+        self.faces = {}
+
 
 class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
         self.face_labels = (TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT)
-        self.vector = (0, 0, 1)  # Positive z-axis is 'front'
+        self.vector = (0, 0, 1)  # Current view vector
         self.generate()
         self.scramble()
 
     def generate(self):
-        """ Generate our six faces, e.g. self.top. """
-        self.faces = {face: self._gen_face(face) for face in self.face_labels}
-
-    def _gen_face(self, face):
-        """ Create faces, which are 3 x 3 arrays of stickers. """
-        # Rubiks cubes color layout is predefined!
-        color = {TOP: 'white', BOTTOM: 'yellow', FRONT: 'red',
-                 BACK: 'orange', LEFT: 'green', RIGHT: 'blue'}[face]
-        return [[color for y in range(3)] for x in range(3)]
+        """ Generate our Cube. """
+        self.blocks = [[[None] * 3 for _ in range(3)] for _ in range(3)]
+        for x in range(3):
+            for y in range(3):
+                for z in range(3):
+                    block = Block(x, y, z)
+                    if x == 0:
+                        vector = (-1, 0, 0)
+                        block.faces[vector] = Sticker('green', vector)
+                    elif x == 2:
+                        vector = (1, 0, 0)
+                        block.faces[vector] = Sticker('blue', vector)
+                    if y == 0:
+                        vector = (0, -1, 0)
+                        block.faces[vector] = Sticker('red', vector)
+                    elif y == 2:
+                        vector = (0, 1, 0)
+                        block.faces[vector] = Sticker('orange', vector)
+                    if z == 0:
+                        vector = (0, 0, -1)
+                        block.faces[vector] = Sticker('yellow', vector)
+                    elif z == 2:
+                        vector = (0, 0, 1)
+                        block.faces[vector] = Sticker('white', vector)
+                    self.blocks[x][y][z] = block
 
     def rotate_vector(self, axis, sign=1):
         """
@@ -66,17 +103,23 @@ class Cube(object):
         return R(x, y, z, theta)  # Calculate our new vector
 
     def rotate(self, axis, sign=1):
-        """
-        Reorient our facing vector by rotation about an axis, and adjust
-        our 'view' attribute accordingly.
-        """
+        """ Reorient our facing vector by rotation about an axis. """
         self.vector = self.rotate_vector(axis, sign=sign)
 
-    def twist(self, direction):
+    def twist(self, plane):
         """
-        Spin a face of the cube.
+        Spin a plane of the cube.
         """
-        pass
+        if plane == TOP:
+            # Assuming view is front (0, 0, 1)
+            # Right becomes front
+            # Back becomes right
+            # Left becomes back
+            # Front becomes left
+            # So each part of each face is rotated about the y-axis
+            # The top pane is rotated through 90 
+            # The bottom 2 panes remain untouched
+            pass
 
     @property
     def view(self):
