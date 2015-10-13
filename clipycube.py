@@ -3,6 +3,7 @@
 import collections
 import curses
 import datetime
+import itertools
 import locale
 import logging
 import math
@@ -30,13 +31,13 @@ CENTER = 'center'
 class Sticker(object):
     """ A block's sticker object. """
     def __init__(self, color, vector):
-        self.vector = vector
+        self.normal = vector
         self.color = color
 
     @property
     def is_visible(self, vector):
         """ Is this sticker visible along a given vector. """
-        return self.vector == vector
+        return self.normal == vector
 
 
 class Block(object):
@@ -50,36 +51,35 @@ class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
         self.face_labels = (TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT)
-        self.vector = (0, 0, 1)  # Current view vector
-        self.generate()
+        self.normal = (0, 0, -1)  # Current view vector
+        self.blocks = self.generate()
         self.scramble()
 
     def generate(self):
         """ Generate our Cube. """
-        self.blocks = [[[None] * 3 for _ in range(3)] for _ in range(3)]
-        for x in range(3):
-            for y in range(3):
-                for z in range(3):
-                    block = Block(x, y, z)
-                    if x == 0:
-                        vector = (-1, 0, 0)
-                        block.faces[vector] = Sticker('green', vector)
-                    elif x == 2:
-                        vector = (1, 0, 0)
-                        block.faces[vector] = Sticker('blue', vector)
-                    if y == 0:
-                        vector = (0, -1, 0)
-                        block.faces[vector] = Sticker('red', vector)
-                    elif y == 2:
-                        vector = (0, 1, 0)
-                        block.faces[vector] = Sticker('orange', vector)
-                    if z == 0:
-                        vector = (0, 0, -1)
-                        block.faces[vector] = Sticker('yellow', vector)
-                    elif z == 2:
-                        vector = (0, 0, 1)
-                        block.faces[vector] = Sticker('white', vector)
-                    self.blocks[x][y][z] = block
+        blocks = [[[None] * 3 for _ in range(3)] for _ in range(3)]
+        for x, y, z in itertools.product(range(3), repeat=3):
+            block = Block(x, y, z)
+            if x == 0:
+                vector = (-1, 0, 0)
+                block.faces[vector] = Sticker('green', vector)
+            elif x == 2:
+                vector = (1, 0, 0)
+                block.faces[vector] = Sticker('blue', vector)
+            if y == 0:
+                vector = (0, -1, 0)
+                block.faces[vector] = Sticker('red', vector)
+            elif y == 2:
+                vector = (0, 1, 0)
+                block.faces[vector] = Sticker('orange', vector)
+            if z == 0:
+                vector = (0, 0, -1)
+                block.faces[vector] = Sticker('yellow', vector)
+            elif z == 2:
+                vector = (0, 0, 1)
+                block.faces[vector] = Sticker('white', vector)
+            blocks[x][y][z] = block
+        return blocks
 
     def rotate_vector(self, axis, sign=1):
         """
@@ -99,12 +99,12 @@ class Cube(object):
                     int(z))
         R = {'x': Rx, 'y': Ry, 'z': Rz}[axis]  # Select a rotation matrix
         theta = sign * math.pi / 2  # Always 90 degrees
-        x, y, z = self.vector
-        return R(x, y, z, theta)  # Calculate our new vector
+        x, y, z = self.normal
+        return R(x, y, z, theta)  # Calculate our new normal vector
 
     def rotate(self, axis, sign=1):
         """ Reorient our facing vector by rotation about an axis. """
-        self.vector = self.rotate_vector(axis, sign=sign)
+        self.normal = self.rotate_vector(axis, sign=sign)
 
     def twist(self, plane):
         """
@@ -131,7 +131,7 @@ class Cube(object):
             (0, 0, -1): BACK,
             (-1, 0, 0): LEFT,
             (0, -1, 0): BOTTOM,
-        }.get(self.vector, None)
+        }.get(self.normal, None)
 
     def scramble(self):
         """ Scramble our faces. """
@@ -149,21 +149,31 @@ class Cube(object):
     def render(self, screen):
         """ Render ourself. """
         colors = ('red', 'green', 'blue', 'white', 'yellow', 'orange')
-        face = self.faces[self.view]
 
         height, width = screen.getmaxyx()
         x_offset, y_offset = int(width/2), int(height/2)
 
-        for i, row in enumerate(face):
-            i += y_offset - 1
-            for j, sticker in enumerate(row):
-                j += x_offset - 1
-                block = chr(0x2588)  # Python 3 only?
-                pair_number = colors.index(sticker) + 1
-                logging.debug('pair_number: {}'.format(pair_number))
-                screen.attron(curses.color_pair(pair_number))
-                screen.addch(int(i), int(j), block)
-                screen.attroff(curses.color_pair(pair_number))
+        block = chr(0x2588)  # Python 3 only?
+        for x, y, z in itertools.product(range(3), repeat=3):
+            for sticker in self.blocks[x][y][z].faces.values():
+                if sticker.normal == self.normal:
+                    j = x + x_offset - 1
+                    i = y + y_offset - 1
+                    pair_number = colors.index(sticker.color) + 1
+                    screen.attron(curses.color_pair(pair_number))
+                    screen.addch(int(i), int(j), block)  # TODO: Convert to ints elsewhere
+                    screen.attroff(curses.color_pair(pair_number))
+
+        #for i, row in enumerate(face):
+        #    i += y_offset - 1
+        #    for j, sticker in enumerate(row):
+        #        j += x_offset - 1
+        #        block = chr(0x2588)  # Python 3 only?
+        #        pair_number = colors.index(sticker) + 1
+        #        logging.debug('pair_number: {}'.format(pair_number))
+        #        screen.attron(curses.color_pair(pair_number))
+        #        screen.addch(int(i), int(j), block)
+        #        screen.attroff(curses.color_pair(pair_number))
 
 
 def init_colors():
@@ -245,11 +255,11 @@ def game():
     """
     """
     cube = Cube()  # new cube
-    print(cube.vector)
+    print(cube.normal)
     print(cube.view)
     cube.show()
     cube.rotate('x')
-    print(cube.vector)
+    print(cube.normal)
     print(cube.view)
     cube.show()
 
