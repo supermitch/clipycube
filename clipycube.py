@@ -30,8 +30,9 @@ CENTER = 'center'
 
 class Sticker(object):
     """ A block's sticker object. """
-    def __init__(self, color, vector):
-        self.normal = vector
+    def __init__(self, x, y, z, normal, color):
+        self.coords = x, y, z
+        self.normal = normal  # Normal vector
         self.color = color
 
     @property
@@ -39,12 +40,10 @@ class Sticker(object):
         """ Is this sticker visible along a given vector. """
         return self.normal == vector
 
-
-class Block(object):
-    """ One of the 26 blocks that comprise a Rubiks cube. """
-    def __init__(self, x, y, z):
-        self.coords = x, y, z
-        self.faces = {}
+    def rotate(self, axis, sign):
+        """ Rotate this sticker in 3D space about the origin. """
+        self.normal = algebra.rotation(self.normal, axis, sign)
+        self.coords = algebra.rotation(self.coords, axis, sign)
 
 
 class Cube(object):
@@ -52,59 +51,42 @@ class Cube(object):
     def __init__(self):
         self.face_labels = (TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT)
         self.normal = (0, 0, -1)  # Current view vector
-        self.blocks = self.generate()
+        self.stickers = self.generate()
         self.scramble()
 
     def generate(self):
         """ Generate our Cube. """
-        blocks = [[[None] * 3 for _ in range(3)] for _ in range(3)]
+        stickers = [[[None] * 3 for _ in range(3)] for _ in range(3)]
         for x, y, z in itertools.product(range(3), repeat=3):
-            block = Block(x, y, z)
             if x == 0:
                 vector = (-1, 0, 0)
-                block.faces[vector] = Sticker('green', vector)
+                color = 'green'
             elif x == 2:
                 vector = (1, 0, 0)
-                block.faces[vector] = Sticker('blue', vector)
+                color = 'blue'
             if y == 0:
                 vector = (0, -1, 0)
-                block.faces[vector] = Sticker('red', vector)
+                color = 'red'
             elif y == 2:
                 vector = (0, 1, 0)
-                block.faces[vector] = Sticker('orange', vector)
+                color = 'orange'
             if z == 0:
                 vector = (0, 0, -1)
-                block.faces[vector] = Sticker('yellow', vector)
+                color = 'yellow'
             elif z == 2:
                 vector = (0, 0, 1)
-                block.faces[vector] = Sticker('white', vector)
-            blocks[x][y][z] = block
-        return blocks
-
-    def rotate_vector(self, axis, sign=1):
-        """
-        Rotate the entire cube to a new view.
-        """
-        def Rx(x, y, z, theta):
-            return (int(x),
-                    int(math.cos(theta) * y - math.sin(theta) * z),
-                    int(math.sin(theta) * y + math.cos(theta) * z))
-        def Ry(x, y, z, theta):
-            return (int(math.cos(theta) * x + math.sin(theta) * z),
-                    int(y),
-                    int(-math.sin(theta) * x + math.cos(theta) * z))
-        def Rz(x, y, z, theta):
-            return (int(math.cos(theta) * x - math.sin(theta) * y),
-                    int(math.sin(theta) * x + math.cos(theta) * y),
-                    int(z))
-        R = {'x': Rx, 'y': Ry, 'z': Rz}[axis]  # Select a rotation matrix
-        theta = sign * math.pi / 2  # Always 90 degrees
-        x, y, z = self.normal
-        return R(x, y, z, theta)  # Calculate our new normal vector
+                color = 'white'
+            stickers[x][y][z] = Sticker(x, y, z, vector, color)
+        return stickers
 
     def rotate(self, axis, sign=1):
         """ Reorient our facing vector by rotation about an axis. """
-        self.normal = self.rotate_vector(axis, sign=sign)
+        self.normal = algebra.rotation(self.normal, axis, sign=sign)
+        # Reposition stickers
+        for x, y, z in itertools.product(range(3), repeat=3):
+            sticker = self.stickers[x][y][z]
+            sticker.rotate(axis, sign=sign)
+
 
     def twist(self, plane):
         """
@@ -163,17 +145,6 @@ class Cube(object):
                     screen.attron(curses.color_pair(pair_number))
                     screen.addch(int(i), int(j), block)  # TODO: Convert to ints elsewhere
                     screen.attroff(curses.color_pair(pair_number))
-
-        #for i, row in enumerate(face):
-        #    i += y_offset - 1
-        #    for j, sticker in enumerate(row):
-        #        j += x_offset - 1
-        #        block = chr(0x2588)  # Python 3 only?
-        #        pair_number = colors.index(sticker) + 1
-        #        logging.debug('pair_number: {}'.format(pair_number))
-        #        screen.attron(curses.color_pair(pair_number))
-        #        screen.addch(int(i), int(j), block)
-        #        screen.attroff(curses.color_pair(pair_number))
 
 
 def init_colors():
