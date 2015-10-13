@@ -11,9 +11,6 @@ import random
 import sys
 
 
-logging.basicConfig(filename='log/clipycube.log', level=logging.DEBUG)
-
-
 # Faces
 TOP = 'top'
 BOTTOM = 'bottom'
@@ -86,7 +83,6 @@ class Cube(object):
         for x, y, z in itertools.product(range(3), repeat=3):
             sticker = self.stickers[x][y][z]
             sticker.rotate(axis, sign=sign)
-
 
     def twist(self, plane):
         """
@@ -255,6 +251,9 @@ def main(screen):
 
 
 if __name__ == '__main__':
+
+    logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
+
     if len(sys.argv) > 1 and sys.argv[1] == 'ui':
         curses.wrapper(main)
     else:
