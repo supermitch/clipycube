@@ -231,7 +231,7 @@ def game():
     cube.show()
 
 
-def main(screen):
+def curses_gui(screen):
     locale.setlocale(locale.LC_ALL, '')
     code = locale.getpreferredencoding()
 
@@ -239,6 +239,7 @@ def main(screen):
     curses.start_color()  # Start colour mode
     if not curses.has_colors():
         sys.exit('Terminal does not support colors!')
+        # TODO: Fall back to text mode
     else:
         old_colors = init_colors()
 
@@ -250,12 +251,15 @@ def main(screen):
         reset_colors(old_colors)
 
 
-if __name__ == '__main__':
-
+def main():
     logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
 
     if len(sys.argv) > 1 and sys.argv[1] == 'ui':
-        curses.wrapper(main)
+        curses.wrapper(curses_gui)
     else:
         game()
+
+
+if __name__ == '__main__':
+    main()
 
