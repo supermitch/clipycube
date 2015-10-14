@@ -1,8 +1,10 @@
 """
 Linear algebra is cool.
 """
+import math
 
-def rotation(self, point, axis, sign=1):
+
+def rotation(point, axis, sign=1):
     """
     Rotate a point (or vector) about the origin in 3D space.
     """

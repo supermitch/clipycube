@@ -7,6 +7,8 @@ import logging
 import random
 import sys
 
+import algebra
+
 
 # Faces
 TOP = 'top'
