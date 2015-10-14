@@ -26,7 +26,6 @@ class Sticker(object):
         self.normal = normal  # Normal vector
         self.color = color
 
-    @property
     def is_visible(self, vector):
         """ Is this sticker visible along a given vector. """
         return self.normal == vector
@@ -137,18 +136,18 @@ class Cube(object):
 
     def render(self, screen):
         """ Render ourself. """
-        colors = ('red', 'green', 'blue', 'white', 'yellow', 'orange')
+        colors = (None, 'red', 'green', 'blue', 'white', 'yellow', 'orange')
 
         height, width = screen.getmaxyx()
-        x_offset, y_offset = int(width/2), int(height/2)
+        x_offset, y_offset = int(width/2) - 1, int(height/2) - 1
 
         block_char = chr(0x2588)  # Python 3 only?
         for sticker in self.stickers.values():
-            if sticker.normal == (0, 0, 1):
+            if sticker.is_visible((0, 0, 1)):
                 x, y, z = sticker.coords
-                j = x + x_offset - 1
-                i = y + y_offset - 1
-                pair_number = colors.index(sticker.color) + 1
+                j = x + x_offset
+                i = y + y_offset
+                pair_number = colors.index(sticker.color)
                 screen.attron(curses.color_pair(pair_number))
                 screen.addch(int(i), int(j), block_char)  # TODO: Convert to ints elsewhere
                 screen.attroff(curses.color_pair(pair_number))
@@ -209,7 +208,7 @@ def main_loop(screen):
         elif c == ord('y'):  # Rotate about y-axis
             cube.rotate('y')
         elif c == ord('z'):  # Rotate about z-axis
-            cube.rotate('z')  # TODO: How does this work?
+            cube.rotate('z')
         elif c == ord('j'):
             cube.twist(TOP)
         elif c == ord('i'):
