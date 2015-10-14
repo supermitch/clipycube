@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 
-import collections
 import curses
-import datetime
 import itertools
 import locale
 import logging
-import math
 import random
 import sys
 
@@ -54,24 +51,82 @@ class Cube(object):
     def generate(self):
         """ Generate our Cube. """
         stickers = [[[None] * 3 for _ in range(3)] for _ in range(3)]
+        stickers = {}
+        x = -1.5
+        ys = range(-1, 2)
+        zs = range(-1, 2)
+        vector = (-1, 0, 0)  # left
+        color = 'green'
+        for y in ys:
+            for z in zs:
+                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+
+        x = 1.5
+        ys = range(-1, 2)
+        zs = range(-1, 2)
+        vector = (1, 0, 0)  # left
+        color = 'blue'
+        for y in ys:
+            for z in zs:
+                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+
+        y = -1.5
+        xs = range(-1, 2)
+        zs = range(-1, 2)
+        vector = (0, -1, 0)  # left
+        color = 'red'
+        for x in xs:
+            for z in zs:
+                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+
+        y = 1.5
+        xs = range(-1, 2)
+        zs = range(-1, 2)
+        vector = (0, 1, 0)  # left
+        color = 'orange'
+        for x in xs:
+            for z in zs:
+                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+
+        z = 1.5
+        xs = range(-1, 2)
+        ys = range(-1, 2)
+        vector = (0, 0, -1)  # left
+        color = 'yellow'
+        for x in xs:
+            for y in ys:
+                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+
+        z = 1.5
+        xs = range(-1, 2)
+        ys = range(-1, 2)
+        vector = (0, 0, 1)  # left
+        color = 'white'
+        for x in xs:
+            for y in ys:
+                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+
+        logging.debug(stickers)
+        return stickers
+
         for x, y, z in itertools.product(range(3), repeat=3):
             if x == 0:
-                vector = (-1, 0, 0)
+                vector = (-1, 0, 0)  # left
                 color = 'green'
             elif x == 2:
-                vector = (1, 0, 0)
+                vector = (1, 0, 0)  # right
                 color = 'blue'
             if y == 0:
-                vector = (0, -1, 0)
+                vector = (0, -1, 0)  # bottom
                 color = 'red'
             elif y == 2:
-                vector = (0, 1, 0)
+                vector = (0, 1, 0)  # top
                 color = 'orange'
             if z == 0:
-                vector = (0, 0, -1)
+                vector = (0, 0, -1)  # back
                 color = 'yellow'
             elif z == 2:
-                vector = (0, 0, 1)
+                vector = (0, 0, 1)  # front
                 color = 'white'
             stickers[x][y][z] = Sticker(x, y, z, vector, color)
         return stickers
@@ -95,7 +150,7 @@ class Cube(object):
             # Left becomes back
             # Front becomes left
             # So each part of each face is rotated about the y-axis
-            # The top pane is rotated through 90 
+            # The top pane is rotated through 90
             # The bottom 2 panes remain untouched
             pass
 
@@ -131,15 +186,15 @@ class Cube(object):
         height, width = screen.getmaxyx()
         x_offset, y_offset = int(width/2), int(height/2)
 
-        block = chr(0x2588)  # Python 3 only?
+        block_char = chr(0x2588)  # Python 3 only?
         for x, y, z in itertools.product(range(3), repeat=3):
-            for sticker in self.blocks[x][y][z].faces.values():
+            for sticker in self.stickers.values():
                 if sticker.normal == self.normal:
                     j = x + x_offset - 1
                     i = y + y_offset - 1
                     pair_number = colors.index(sticker.color) + 1
                     screen.attron(curses.color_pair(pair_number))
-                    screen.addch(int(i), int(j), block)  # TODO: Convert to ints elsewhere
+                    screen.addch(int(i), int(j), block_char)  # TODO: Convert to ints elsewhere
                     screen.attroff(curses.color_pair(pair_number))
 
 
