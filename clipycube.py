@@ -89,7 +89,7 @@ class Cube(object):
             for z in zs:
                 stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
 
-        z = 1.5
+        z = -1.5
         xs = range(-1, 2)
         ys = range(-1, 2)
         vector = (0, 0, -1)  # back
