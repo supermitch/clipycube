@@ -189,12 +189,12 @@ def init_colors():
     old_colors = {}
     for key, value in colors.items():
         old_colors[key] = curses.color_content(key)
-        logging.info('old color: {}'.format(old_colors))
+        logging.info('Old color: {} - {}'.format(key, old_colors))
         r = int(value[0:2], 16) / 255 * 1000
         g = int(value[2:4], 16) / 255 * 1000
         b = int(value[4:6], 16) / 255 * 1000
         curses.init_color(key, int(r), int(g), int(b))
-        logging.info('new color: {}'.format(curses.color_content(key)))
+        logging.info('New color: {} - {}'.format(key, curses.color_content(key)))
 
     curses.init_pair(1, 20, -1)  # red
     curses.init_pair(2, 21, -1)  # green
