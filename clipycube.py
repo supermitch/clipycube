@@ -52,7 +52,6 @@ class Cube(object):
 
     def generate(self):
         """ Generate our Cube. """
-        stickers = [[[None] * 3 for _ in range(3)] for _ in range(3)]
         stickers = {}
         x = -1.5
         ys = range(-1, 2)
@@ -66,7 +65,7 @@ class Cube(object):
         x = 1.5
         ys = range(-1, 2)
         zs = range(-1, 2)
-        vector = (1, 0, 0)  # left
+        vector = (1, 0, 0)  # right
         color = 'blue'
         for y in ys:
             for z in zs:
@@ -75,7 +74,7 @@ class Cube(object):
         y = -1.5
         xs = range(-1, 2)
         zs = range(-1, 2)
-        vector = (0, -1, 0)  # left
+        vector = (0, -1, 0)  # bottom
         color = 'red'
         for x in xs:
             for z in zs:
@@ -84,7 +83,7 @@ class Cube(object):
         y = 1.5
         xs = range(-1, 2)
         zs = range(-1, 2)
-        vector = (0, 1, 0)  # left
+        vector = (0, 1, 0)  # top
         color = 'orange'
         for x in xs:
             for z in zs:
@@ -93,7 +92,7 @@ class Cube(object):
         z = 1.5
         xs = range(-1, 2)
         ys = range(-1, 2)
-        vector = (0, 0, -1)  # left
+        vector = (0, 0, -1)  # back
         color = 'yellow'
         for x in xs:
             for y in ys:
@@ -102,43 +101,19 @@ class Cube(object):
         z = 1.5
         xs = range(-1, 2)
         ys = range(-1, 2)
-        vector = (0, 0, 1)  # left
+        vector = (0, 0, 1)  # front
         color = 'white'
         for x in xs:
             for y in ys:
                 stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
 
-        logging.debug(stickers)
-        return stickers
-
-        for x, y, z in itertools.product(range(3), repeat=3):
-            if x == 0:
-                vector = (-1, 0, 0)  # left
-                color = 'green'
-            elif x == 2:
-                vector = (1, 0, 0)  # right
-                color = 'blue'
-            if y == 0:
-                vector = (0, -1, 0)  # bottom
-                color = 'red'
-            elif y == 2:
-                vector = (0, 1, 0)  # top
-                color = 'orange'
-            if z == 0:
-                vector = (0, 0, -1)  # back
-                color = 'yellow'
-            elif z == 2:
-                vector = (0, 0, 1)  # front
-                color = 'white'
-            stickers[x][y][z] = Sticker(x, y, z, vector, color)
         return stickers
 
     def rotate(self, axis, sign=1):
         """ Reorient our facing vector by rotation about an axis. """
         self.normal = algebra.rotation(self.normal, axis, sign=sign)
         # Reposition stickers
-        for x, y, z in itertools.product(range(3), repeat=3):
-            sticker = self.stickers[x][y][z]
+        for sticker in self.stickers.values():
             sticker.rotate(axis, sign=sign)
 
     def twist(self, plane):
@@ -189,15 +164,15 @@ class Cube(object):
         x_offset, y_offset = int(width/2), int(height/2)
 
         block_char = chr(0x2588)  # Python 3 only?
-        for x, y, z in itertools.product(range(3), repeat=3):
-            for sticker in self.stickers.values():
-                if sticker.normal == self.normal:
-                    j = x + x_offset - 1
-                    i = y + y_offset - 1
-                    pair_number = colors.index(sticker.color) + 1
-                    screen.attron(curses.color_pair(pair_number))
-                    screen.addch(int(i), int(j), block_char)  # TODO: Convert to ints elsewhere
-                    screen.attroff(curses.color_pair(pair_number))
+        for sticker in self.stickers.values():
+            if sticker.normal == (0, 0, 1):
+                x, y, z = sticker.coords
+                j = x + x_offset - 1
+                i = y + y_offset - 1
+                pair_number = colors.index(sticker.color) + 1
+                screen.attron(curses.color_pair(pair_number))
+                screen.addch(int(i), int(j), block_char)  # TODO: Convert to ints elsewhere
+                screen.attroff(curses.color_pair(pair_number))
 
 
 def init_colors():
