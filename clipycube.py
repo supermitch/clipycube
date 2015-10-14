@@ -10,18 +10,13 @@ import sys
 import algebra
 
 
-# Faces
-TOP = 'top'
-BOTTOM = 'bottom'
-FRONT = 'front'
-BACK = 'back'
-LEFT = 'left'
-RIGHT = 'right'
-
 # Twist planes
 MIDDLE = 'middle'
 CENTER = 'center'
-# Also TOP, BOTTOM, LEFT & RIGHT
+TOP = 'top'
+BOTTOM = 'bottom'
+LEFT = 'left'
+RIGHT = 'right'
 
 
 class Sticker(object):
@@ -45,8 +40,6 @@ class Sticker(object):
 class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
-        self.face_labels = (TOP, BOTTOM, FRONT, BACK, LEFT, RIGHT)
-        self.normal = (0, 0, -1)  # Current view vector
         self.stickers = self.generate()
         self.scramble()
 
@@ -110,8 +103,7 @@ class Cube(object):
         return stickers
 
     def rotate(self, axis, sign=1):
-        """ Reorient our facing vector by rotation about an axis. """
-        self.normal = algebra.rotation(self.normal, axis, sign=sign)
+        """ Reorient our cube by rotation about an axis. """
         # Reposition stickers
         for sticker in self.stickers.values():
             sticker.rotate(axis, sign=sign)
@@ -131,30 +123,17 @@ class Cube(object):
             # The bottom 2 panes remain untouched
             pass
 
-    @property
-    def view(self):
-        """ Return our facing view, given our facing vector. """
-        return {
-            (0, 0, 1): FRONT,
-            (1, 0, 0): RIGHT,
-            (0, 1, 0): TOP,
-            (0, 0, -1): BACK,
-            (-1, 0, 0): LEFT,
-            (0, -1, 0): BOTTOM,
-        }.get(self.normal, None)
-
     def scramble(self):
         """ Scramble our faces. """
         pass
 
     def describe(self):
         """ Describe the cube's current layout. """
-        for name, face in self.faces.items():
-            print(name, face)
+        pass
 
     def show(self):
         """ Print the currently displayed face. """
-        print(self.view, self.faces[self.view])
+        pass
 
     def render(self, screen):
         """ Render ourself. """
@@ -254,12 +233,8 @@ def game():
     """
     """
     cube = Cube()  # new cube
-    print(cube.normal)
-    print(cube.view)
     cube.show()
     cube.rotate('x')
-    print(cube.normal)
-    print(cube.view)
     cube.show()
 
 
