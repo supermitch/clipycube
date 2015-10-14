@@ -12,10 +12,12 @@ def rotation(point, axis, sign=1):
         return (int(x),
                 int(math.cos(theta) * y - math.sin(theta) * z),
                 int(math.sin(theta) * y + math.cos(theta) * z))
+
     def Ry(x, y, z, theta):
         return (int(math.cos(theta) * x + math.sin(theta) * z),
                 int(y),
                 int(-math.sin(theta) * x + math.cos(theta) * z))
+
     def Rz(x, y, z, theta):
         return (int(math.cos(theta) * x - math.sin(theta) * y),
                 int(math.sin(theta) * x + math.cos(theta) * y),
