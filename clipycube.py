@@ -30,7 +30,7 @@ class Sticker(object):
         """ Is this sticker visible along a given vector. """
         return self.normal == vector
 
-    def rotate(self, axis, sign):
+    def rotate(self, axis, sign=1):
         """ Rotate this sticker in 3D space about the origin. """
         self.normal = algebra.rotation(self.normal, axis, sign)
         self.coords = algebra.rotation(self.coords, axis, sign)
