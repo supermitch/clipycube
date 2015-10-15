@@ -43,6 +43,7 @@ class Sticker(object):
 class Cube(object):
     """ A Rubik's cube object. """
     def __init__(self):
+        self.normal = (0, 0, 1)  # Our view normal. Doesn't change.
         self.stickers = self.generate()
         self.scramble()
 
@@ -150,7 +151,7 @@ class Cube(object):
 
         block_char = chr(0x2588)  # Python 3 only?
         for sticker in self.stickers.values():
-            if sticker.is_visible((0, 0, 1)):
+            if sticker.is_visible(self.normal):
                 x, y, z = sticker.coords
                 j = x + x_offset
                 i = y + y_offset
