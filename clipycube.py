@@ -117,15 +117,38 @@ class Cube(object):
         Spin a plane of the cube.
         """
         if plane == TOP:
-            # Assuming view is front (0, 0, 1)
-            # Right becomes front
-            # Back becomes right
-            # Left becomes back
-            # Front becomes left
-            # So each part of each face is rotated about the y-axis
-            # The top pane is rotated through 90
-            # The bottom 2 panes remain untouched
-            pass
+            for sticker in self.stickers.values():
+                x, y, z = sticker.coords
+                if y > 0:
+                    sticker.rotate('y')
+        elif plane == MIDDLE:
+            for sticker in self.stickers.values():
+                x, y, z = sticker.coords
+                if y == 0:
+                    sticker.rotate('y')
+        elif plane == MIDDLE:
+            for sticker in self.stickers.values():
+                x, y, z = sticker.coords
+                if y < 0:
+                    sticker.rotate('y')
+        elif plane == RIGHT:
+            for sticker in self.stickers.values():
+                x, y, z = sticker.coords
+                if x > 0:
+                    sticker.rotate('y')
+        elif plane == CENTER:
+            for sticker in self.stickers.values():
+                x, y, z = sticker.coords
+                if x == 0:
+                    sticker.rotate('y')
+        elif plane == RIGHT:
+            for sticker in self.stickers.values():
+                x, y, z = sticker.coords
+                if x > 0:
+                    sticker.rotate('y')
+        else:
+            logging.error('Unknown twisting plane: [{}]'.format(plane))
+
 
     def scramble(self):
         """ Scramble our faces. """
