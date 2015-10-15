@@ -35,6 +35,10 @@ class Sticker(object):
         self.normal = algebra.rotation(self.normal, axis, sign)
         self.coords = algebra.rotation(self.coords, axis, sign)
 
+    def __repr__(self):
+        x, y, z = self.coords
+        return 'Sticker({}, {}, {}, {}, {})'.format(x, y, z, self.normal, self.color)
+
 
 class Cube(object):
     """ A Rubik's cube object. """
@@ -127,12 +131,15 @@ class Cube(object):
         pass
 
     def describe(self):
-        """ Describe the cube's current layout. """
-        pass
+        """ Describe the cube's entire current layout. """
+        for sticker in self.stickers.values():
+            print(sticker)
 
     def show(self):
         """ Print the currently displayed face. """
-        pass
+        for sticker in self.stickers.values():
+            if sticker.is_visible(self.normal):
+                print(sticker)
 
     def render(self, screen):
         """ Render ourself. """
