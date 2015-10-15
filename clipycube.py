@@ -126,7 +126,7 @@ class Cube(object):
                 x, y, z = sticker.coords
                 if y == 0:
                     sticker.rotate('y')
-        elif plane == MIDDLE:
+        elif plane == BOTTOM:
             for sticker in self.stickers.values():
                 x, y, z = sticker.coords
                 if y < 0:
@@ -135,17 +135,17 @@ class Cube(object):
             for sticker in self.stickers.values():
                 x, y, z = sticker.coords
                 if x > 0:
-                    sticker.rotate('y')
+                    sticker.rotate('x')
         elif plane == CENTER:
             for sticker in self.stickers.values():
                 x, y, z = sticker.coords
                 if x == 0:
-                    sticker.rotate('y')
+                    sticker.rotate('x')
         elif plane == RIGHT:
             for sticker in self.stickers.values():
                 x, y, z = sticker.coords
                 if x > 0:
-                    sticker.rotate('y')
+                    sticker.rotate('x')
         else:
             logging.error('Unknown twisting plane: [{}]'.format(plane))
 
@@ -156,14 +156,18 @@ class Cube(object):
 
     def describe(self):
         """ Describe the cube's entire current layout. """
+        print('Cube:')
         for sticker in self.stickers.values():
             print(sticker)
+        print('\n')
 
     def show(self):
         """ Print the currently displayed face. """
+        print('Front View:')
         for sticker in self.stickers.values():
             if sticker.is_visible(self.normal):
                 print(sticker)
+        print('\n')
 
     def render(self, screen):
         """ Render ourself. """
@@ -265,6 +269,8 @@ def game():
     cube = Cube()  # new cube
     cube.show()
     cube.rotate('x')
+    cube.show()
+    cube.twist('top')
     cube.show()
 
 
