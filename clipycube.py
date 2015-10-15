@@ -131,7 +131,7 @@ class Cube(object):
                 x, y, z = sticker.coords
                 if y < 0:
                     sticker.rotate('y')
-        elif plane == RIGHT:
+        elif plane == LEFT:
             for sticker in self.stickers.values():
                 x, y, z = sticker.coords
                 if x > 0:
