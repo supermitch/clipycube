@@ -149,10 +149,11 @@ class Cube(object):
         else:
             logging.error('Unknown twisting plane: [{}]'.format(plane))
 
-
     def scramble(self):
         """ Scramble our faces. """
-        pass
+        planes = [TOP, MIDDLE, BOTTOM, RIGHT, CENTER, LEFT]
+        for _ in range(3000):
+            self.twist(random.choice(planes))
 
     def describe(self):
         """ Describe the cube's entire current layout. """
@@ -256,6 +257,8 @@ def main_loop(screen):
             cube.twist(CENTER)  # vertical
         elif c == ord('l'):
             cube.twist(RIGHT)
+        elif c == ord('s'):
+            cube.scramble()
         elif c == ord('q'):
             break  # Exit the while loop
         screen.box()
