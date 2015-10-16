@@ -4,6 +4,7 @@ import curses
 import itertools
 import locale
 import logging
+import operator
 import random
 import sys
 
@@ -112,42 +113,22 @@ class Cube(object):
         for sticker in self.stickers.values():
             sticker.rotate(axis, sign=sign)
 
-    def twist(self, plane):
+    def twist(self, plane, sign=1):
         """
         Spin a plane of the cube.
         """
-        if plane == TOP:
-            for sticker in self.stickers.values():
-                x, y, z = sticker.coords
-                if y > 0:
-                    sticker.rotate('y')
-        elif plane == MIDDLE:
-            for sticker in self.stickers.values():
-                x, y, z = sticker.coords
-                if y == 0:
-                    sticker.rotate('y')
-        elif plane == BOTTOM:
-            for sticker in self.stickers.values():
-                x, y, z = sticker.coords
-                if y < 0:
-                    sticker.rotate('y')
-        elif plane == LEFT:
-            for sticker in self.stickers.values():
-                x, y, z = sticker.coords
-                if x > 0:
-                    sticker.rotate('x')
-        elif plane == CENTER:
-            for sticker in self.stickers.values():
-                x, y, z = sticker.coords
-                if x == 0:
-                    sticker.rotate('x')
-        elif plane == RIGHT:
-            for sticker in self.stickers.values():
-                x, y, z = sticker.coords
-                if x > 0:
-                    sticker.rotate('x')
-        else:
-            logging.error('Unknown twisting plane: [{}]'.format(plane))
+        twist = {  # plane: (comparison function, axis),
+            'top': (operator.gt, 1),
+            'middle': (operator.eq, 1),
+            'bottom': (operator.lt, 1),
+            'right': (operator.gt, 0),
+            'center': (operator.eq, 0),
+            'left': (operator.lt, 0),
+        }
+        comparison, axis = twist[plane]
+        for sticker in self.stickers.values():
+            if comparison(sticker.coords[axis], 0):  # Only rotate stickers in the selected plane
+                sticker.rotate(axis)
 
     def scramble(self):
         """ Scramble our faces. """
@@ -240,11 +221,11 @@ def main_loop(screen):
     while True:
         c = screen.getch()
         if c == ord('x'):  # Rotate about x-axis
-            cube.rotate('x')
+            cube.rotate(0)
         elif c == ord('y'):  # Rotate about y-axis
-            cube.rotate('y')
+            cube.rotate(1)
         elif c == ord('z'):  # Rotate about z-axis
-            cube.rotate('z')
+            cube.rotate(2)
         elif c == ord('j'):
             cube.twist(TOP)
         elif c == ord('i'):

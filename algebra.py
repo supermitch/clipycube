@@ -23,7 +23,7 @@ def rotation(point, axis, sign=1):
                 round(math.sin(theta) * x + math.cos(theta) * y, 1),
                 round(z, 1))
 
-    R = {'x': Rx, 'y': Ry, 'z': Rz}[axis]  # Select a rotation matrix
+    R = {0: Rx, 1: Ry, 2: Rz}[axis]  # Select a rotation matrix depending on which axis
     theta = sign * math.pi / 2  # Always 90 degrees
     x, y, z = point  # Assumes 3D point or vector
     return R(x, y, z, theta)  # Calculate our new normal vector
