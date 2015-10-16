@@ -5,6 +5,7 @@ import itertools
 import locale
 import logging
 import operator
+import os
 import random
 import sys
 
@@ -170,6 +171,17 @@ class Cube(object):
                 screen.attroff(curses.color_pair(pair_number))
 
 
+def setup_logging():
+    """
+    Set up log folder and configure logger.
+    """
+    root = os.path.dirname(os.path.abspath(__file__))
+    log_dir = os.path.join(root, 'log')
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
+
+
 def init_colors():
     """
     Modify and then initialize color pairs to match an actual Rubiks cube.
@@ -279,7 +291,7 @@ def curses_gui(screen):
 
 
 def main():
-    logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
+    setup_logging()
 
     if len(sys.argv) > 1 and sys.argv[1] == 'ui':
         curses.wrapper(curses_gui)
