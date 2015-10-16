@@ -112,7 +112,7 @@ class Cube(object):
         """ Reorient our cube by rotation about an axis. """
         # Reposition stickers
         for sticker in self.stickers.values():
-            sticker.rotate(axis, sign=sign)
+            sticker.rotate(axis, sign)
 
     def twist(self, plane, sign=1):
         """
@@ -129,7 +129,7 @@ class Cube(object):
         comparison, axis = twist[plane]
         for sticker in self.stickers.values():
             if comparison(sticker.coords[axis], 0):  # Only rotate stickers in the selected plane
-                sticker.rotate(axis)
+                sticker.rotate(axis, sign)
 
     def scramble(self):
         """ Scramble our faces. """
