@@ -275,7 +275,7 @@ def game():
     """
     cube = Cube()  # new cube
     cube.show()
-    cube.rotate('x')
+    cube.rotate(0)
     cube.show()
     cube.twist('top')
     cube.show()
