@@ -52,6 +52,17 @@ class Cube(object):
     def generate(self):
         """ Generate our Cube. """
         stickers = []
+        faces = {
+            'left': ((-1, 0, 0), 'green'),
+            'right': ((1, 0, 0), 'blue'),
+            'bottom': ((0, -1, 0), 'red'),
+            'top': ((0, 1, 0), 'orange'),
+            'back': ((0, 0, -1), 'yellow'),
+            'front': ((0, 0, 1), 'white'),
+        }
+        for normal, color in faces.values():
+            pass
+
         x = -1.5
         ys = range(-1, 2)
         zs = range(-1, 2)
