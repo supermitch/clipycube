@@ -51,71 +51,20 @@ class Cube(object):
 
     def generate(self):
         """ Generate our Cube. """
-        stickers = []
         faces = {
-            'left': ((-1, 0, 0), 'green'),
-            'right': ((1, 0, 0), 'blue'),
-            'bottom': ((0, -1, 0), 'red'),
-            'top': ((0, 1, 0), 'orange'),
-            'back': ((0, 0, -1), 'yellow'),
-            'front': ((0, 0, 1), 'white'),
+            'left': ([-1.5], range(-1, 2), range(-1, 2), (-1, 0, 0), 'green'),
+            'right': ([1.5], range(-1, 2), range(-1, 2), (1, 0, 0), 'blue'),
+            'bottom': (range(-1, 2), [-1.5], range(-1, 2), (0, -1, 0), 'red'),
+            'top': (range(-1, 2), [1.5], range(-1, 2), (0, 1, 0), 'orange'),
+            'back': (range(-1, 2), range(-1, 2), [-1.5], (0, 0, -1), 'yellow'),
+            'front': (range(-1, 2), range(-1, 2), [1.5], (0, 0, 1), 'white'),
         }
-        for normal, color in faces.values():
-            pass
-
-        x = -1.5
-        ys = range(-1, 2)
-        zs = range(-1, 2)
-        vector = (-1, 0, 0)  # left
-        color = 'green'
-        for y in ys:
-            for z in zs:
-                stickers.append(Sticker(x, y, z, vector, color))
-
-        x = 1.5
-        ys = range(-1, 2)
-        zs = range(-1, 2)
-        vector = (1, 0, 0)  # right
-        color = 'blue'
-        for y in ys:
-            for z in zs:
-                stickers.append(Sticker(x, y, z, vector, color))
-
-        y = -1.5
-        xs = range(-1, 2)
-        zs = range(-1, 2)
-        vector = (0, -1, 0)  # bottom
-        color = 'red'
-        for x in xs:
-            for z in zs:
-                stickers.append(Sticker(x, y, z, vector, color))
-
-        y = 1.5
-        xs = range(-1, 2)
-        zs = range(-1, 2)
-        vector = (0, 1, 0)  # top
-        color = 'orange'
-        for x in xs:
-            for z in zs:
-                stickers.append(Sticker(x, y, z, vector, color))
-
-        z = -1.5
-        xs = range(-1, 2)
-        ys = range(-1, 2)
-        vector = (0, 0, -1)  # back
-        color = 'yellow'
-        for x in xs:
-            for y in ys:
-                stickers.append(Sticker(x, y, z, vector, color))
-
-        z = 1.5
-        xs = range(-1, 2)
-        ys = range(-1, 2)
-        vector = (0, 0, 1)  # front
-        color = 'white'
-        for x in xs:
-            for y in ys:
-                stickers.append(Sticker(x, y, z, vector, color))
+        stickers = []
+        for xs, ys, zs, normal, color in faces.values():
+            for x in xs:
+                for y in ys:
+                    for z in zs:
+                        stickers.append(Sticker(x, y, z, normal, color))
 
         return stickers
 
