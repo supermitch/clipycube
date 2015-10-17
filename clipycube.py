@@ -242,28 +242,28 @@ def main_loop(screen):
     cube.render(screen)
 
     while True:
-        c = screen.getch()
-        if c == ord('x'):  # Rotate about x-axis
+        c = chr(screen.getch())
+        if c == 'x':  # Rotate about x-axis
             cube.rotate(0)
-        elif c == ord('y'):  # Rotate about y-axis
+        elif c == 'y':  # Rotate about y-axis
             cube.rotate(1)
-        elif c == ord('z'):  # Rotate about z-axis
+        elif c == 'z':  # Rotate about z-axis
             cube.rotate(2)
-        elif c == ord('j'):
+        elif c == 'j':
             cube.twist(TOP)
-        elif c == ord('i'):
+        elif c == 'i':
             cube.twist(MIDDLE)  # horizontal
-        elif c == ord('k'):
+        elif c == 'k':
             cube.twist(BOTTOM)
-        elif c == ord('h'):
+        elif c == 'h':
             cube.twist(LEFT)
-        elif c == ord('m'):
+        elif c == 'm':
             cube.twist(CENTER)  # vertical
-        elif c == ord('l'):
+        elif c == 'l':
             cube.twist(RIGHT)
-        elif c == ord('s'):
+        elif c == 's':
             cube.scramble()
-        elif c == ord('q'):
+        elif c == 'q':
             break  # Exit the while loop
         screen.box()
         cube.render(screen)
