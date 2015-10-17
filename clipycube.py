@@ -51,7 +51,7 @@ class Cube(object):
 
     def generate(self):
         """ Generate our Cube. """
-        stickers = {}
+        stickers = []
         x = -1.5
         ys = range(-1, 2)
         zs = range(-1, 2)
@@ -59,7 +59,7 @@ class Cube(object):
         color = 'green'
         for y in ys:
             for z in zs:
-                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+                stickers.append(Sticker(x, y, z, vector, color))
 
         x = 1.5
         ys = range(-1, 2)
@@ -68,7 +68,7 @@ class Cube(object):
         color = 'blue'
         for y in ys:
             for z in zs:
-                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+                stickers.append(Sticker(x, y, z, vector, color))
 
         y = -1.5
         xs = range(-1, 2)
@@ -77,7 +77,7 @@ class Cube(object):
         color = 'red'
         for x in xs:
             for z in zs:
-                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+                stickers.append(Sticker(x, y, z, vector, color))
 
         y = 1.5
         xs = range(-1, 2)
@@ -86,7 +86,7 @@ class Cube(object):
         color = 'orange'
         for x in xs:
             for z in zs:
-                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+                stickers.append(Sticker(x, y, z, vector, color))
 
         z = -1.5
         xs = range(-1, 2)
@@ -95,7 +95,7 @@ class Cube(object):
         color = 'yellow'
         for x in xs:
             for y in ys:
-                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+                stickers.append(Sticker(x, y, z, vector, color))
 
         z = 1.5
         xs = range(-1, 2)
@@ -104,14 +104,14 @@ class Cube(object):
         color = 'white'
         for x in xs:
             for y in ys:
-                stickers[(x, y, z)] = Sticker(x, y, z, vector, color)
+                stickers.append(Sticker(x, y, z, vector, color))
 
         return stickers
 
     def rotate(self, axis, sign=1):
         """ Reorient our cube by rotation about an axis. """
         # Reposition stickers
-        for sticker in self.stickers.values():
+        for sticker in self.stickers:
             sticker.rotate(axis, sign)
 
     def twist(self, plane, sign=1):
@@ -127,7 +127,7 @@ class Cube(object):
             'left': (operator.lt, 0),
         }
         comparison, axis = twist[plane]
-        for sticker in self.stickers.values():
+        for sticker in self.stickers:
             if comparison(sticker.coords[axis], 0):  # Only rotate stickers in the selected plane
                 sticker.rotate(axis, sign)
 
@@ -140,14 +140,14 @@ class Cube(object):
     def describe(self):
         """ Describe the cube's entire current layout. """
         print('Cube:')
-        for sticker in self.stickers.values():
+        for sticker in self.stickers:
             print(sticker)
         print('\n')
 
     def show(self):
         """ Print the currently displayed face. """
         print('Front View:')
-        for sticker in self.stickers.values():
+        for sticker in self.stickers:
             if sticker.is_visible(self.normal):
                 print(sticker)
         print('\n')
@@ -160,7 +160,7 @@ class Cube(object):
         x_offset, y_offset = int(width/2) - 1, int(height/2) - 1
 
         block_char = chr(0x2588)  # Python 3 only?
-        for sticker in self.stickers.values():
+        for sticker in self.stickers:
             if sticker.is_visible(self.normal):
                 x, y, z = sticker.coords
                 j = x + x_offset
