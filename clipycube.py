@@ -145,28 +145,31 @@ def main_loop(screen):
 
     screen.box()  # Render window frame
     while True:
-        c = chr(screen.getch())
-        if c == 'x':  # Rotate about x-axis
+        cube.render(screen)
+        screen.refresh()
+
+        key = screen.getkey()
+        if key == 'x':  # Rotate about x-axis
             cube.rotate(0)
-        elif c == 'y':  # Rotate about y-axis
+        elif key == 'y':  # Rotate about y-axis
             cube.rotate(1)
-        elif c == 'z':  # Rotate about z-axis
+        elif key == 'z':  # Rotate about z-axis
             cube.rotate(2)
-        elif c == 'j':
+        elif key == 'j':
             cube.twist('top')
-        elif c == 'i':
+        elif key == 'i':
             cube.twist('middle')  # horizontal
-        elif c == 'k':
+        elif key == 'k':
             cube.twist('bottom')
-        elif c == 'h':
+        elif key == 'h':
             cube.twist('left')
-        elif c == 'm':
+        elif key == 'm':
             cube.twist('center')  # vertical
-        elif c == 'l':
+        elif key == 'l':
             cube.twist('right')
-        elif c == 's':
+        elif key == 's':
             cube.scramble()
-        elif c == 'q':
+        elif key == 'q':
             break  # Exit the while loop
     screen.erase()  # Avoid flashing reset colours
     screen.refresh()
