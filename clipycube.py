@@ -151,24 +151,44 @@ def main_loop(screen):
         key = screen.getkey()
         if key == 'x':  # Rotate about x-axis
             cube.rotate(0)
+        elif key == 'X':
+            cube.rotate(0, sign=-1)
         elif key == 'y':  # Rotate about y-axis
             cube.rotate(1)
+        elif key == 'Y':
+            cube.rotate(1, sign=-1)
         elif key == 'z':  # Rotate about z-axis
             cube.rotate(2)
+        elif key == 'Z':
+            cube.rotate(2, sign=-1)
         elif key == 'j':
             cube.twist('top')
+        elif key == 'J':
+            cube.twist('top', sign=-1)
         elif key == 'i':
             cube.twist('middle')  # horizontal
+        elif key == 'I':
+            cube.twist('middle', sign=-1)
         elif key == 'k':
             cube.twist('bottom')
+        elif key == 'K':
+            cube.twist('bottom', sign=-1)
         elif key == 'h':
             cube.twist('left')
+        elif key == 'H':
+            cube.twist('left', sign=-1)
         elif key == 'm':
             cube.twist('center')  # vertical
+        elif key == 'M':
+            cube.twist('center', sign=-1)
         elif key == 'l':
             cube.twist('right')
+        elif key == 'L':
+            cube.twist('right', sign=-1)
         elif key == 's':
             cube.scramble()
+        elif key == 'S':
+            cube.solve()
         elif key == 'q':
             break  # Exit the while loop
     screen.erase()  # Avoid flashing reset colours
