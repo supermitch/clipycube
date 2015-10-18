@@ -13,18 +13,13 @@ import algebra
 import renderer
 
 
-# Twist planes
-MIDDLE = 'middle'
-CENTER = 'center'
-TOP = 'top'
-BOTTOM = 'bottom'
-LEFT = 'left'
-RIGHT = 'right'
-
-
 class Sticker(object):
-    """ A block's sticker object. """
+    """
+    A sticker object. There are 9 on each face of the cube.
+    Think of it like a sprite that can be moved and rendered.
+    """
     def __init__(self, x, y, z, normal, color):
+        """ Initialize position, orientation, and color. """
         self.coords = x, y, z
         self.normal = normal  # Normal vector
         self.color = color
@@ -45,6 +40,7 @@ class Sticker(object):
 
 class Cube(object):
     """ A Rubik's cube object. """
+
     def __init__(self):
         self.normal = (0, 0, 1)  # Our view normal. Doesn't change.
         self.stickers = self.generate()
@@ -70,7 +66,6 @@ class Cube(object):
 
     def rotate(self, axis, sign=1):
         """ Reorient our cube by rotation about an axis. """
-        # Reposition stickers
         for sticker in self.stickers:
             sticker.rotate(axis, sign)
 
@@ -93,7 +88,7 @@ class Cube(object):
 
     def scramble(self):
         """ Scramble our faces. """
-        planes = [TOP, MIDDLE, BOTTOM, RIGHT, CENTER, LEFT]
+        planes = ['top', 'middle', 'bottom', 'right', 'center', 'left']
         for _ in range(3000):
             self.twist(random.choice(planes))
 
@@ -106,7 +101,7 @@ class Cube(object):
 
     def show(self):
         """ Print the currently displayed face. """
-        print('Front View:')
+        print('Front:')
         for sticker in self.stickers:
             if sticker.is_visible(self.normal):
                 print(sticker)
@@ -142,7 +137,6 @@ def setup_logging():
     logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
 
 
-
 def main_loop(screen):
     """
     Run the main game loop.
@@ -160,17 +154,17 @@ def main_loop(screen):
         elif c == 'z':  # Rotate about z-axis
             cube.rotate(2)
         elif c == 'j':
-            cube.twist(TOP)
+            cube.twist('top')
         elif c == 'i':
-            cube.twist(MIDDLE)  # horizontal
+            cube.twist('middle')  # horizontal
         elif c == 'k':
-            cube.twist(BOTTOM)
+            cube.twist('bottom')
         elif c == 'h':
-            cube.twist(LEFT)
+            cube.twist('left')
         elif c == 'm':
-            cube.twist(CENTER)  # vertical
+            cube.twist('center')  # vertical
         elif c == 'l':
-            cube.twist(RIGHT)
+            cube.twist('right')
         elif c == 's':
             cube.scramble()
         elif c == 'q':
