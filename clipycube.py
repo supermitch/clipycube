@@ -141,10 +141,9 @@ def main_loop(screen):
     """
     Run the main game loop.
     """
-    screen.box()  # Render window frame
     cube = Cube()  # new cube
-    cube.render(screen)
 
+    screen.box()  # Render window frame
     while True:
         c = chr(screen.getch())
         if c == 'x':  # Rotate about x-axis
@@ -169,9 +168,8 @@ def main_loop(screen):
             cube.scramble()
         elif c == 'q':
             break  # Exit the while loop
-        screen.box()
-        cube.render(screen)
-        screen.refresh()
+    screen.erase()  # Avoid flashing reset colours
+    screen.refresh()
 
 
 def game():
