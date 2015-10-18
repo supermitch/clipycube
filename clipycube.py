@@ -92,6 +92,10 @@ class Cube(object):
         for _ in range(3000):
             self.twist(random.choice(planes))
 
+    def solve(self):
+        """ Put the cube in the initial ('solved') state. """
+        self.stickers = self.generate()
+
     def describe(self):
         """ Describe the cube's entire current layout. """
         print('Cube:')
