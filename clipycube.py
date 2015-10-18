@@ -10,6 +10,7 @@ import random
 import sys
 
 import algebra
+import renderer
 
 
 # Twist planes
@@ -50,7 +51,7 @@ class Cube(object):
         self.scramble()
 
     def generate(self):
-        """ Generate our Cube. """
+        """ Generate our Cube by positioning stickers on all the faces. """
         faces = {
             'left': ([-1.5], range(-1, 2), range(-1, 2), (-1, 0, 0), 'green'),
             'right': ([1.5], range(-1, 2), range(-1, 2), (1, 0, 0), 'blue'),
@@ -65,7 +66,6 @@ class Cube(object):
                 for y in ys:
                     for z in zs:
                         stickers.append(Sticker(x, y, z, normal, color))
-
         return stickers
 
     def rotate(self, axis, sign=1):
@@ -142,45 +142,6 @@ def setup_logging():
     logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
 
 
-def init_colors():
-    """
-    Modify and then initialize color pairs to match an actual Rubiks cube.
-    """
-    colors = {
-        20: 'C41E3A',  # red
-        21: '0051BA',  # green
-        22: '009E60',  # blue
-        23: 'FFD500',  # yellow
-        24: 'FF5800',  # orange
-    }
-    old_colors = {}
-    for key, value in colors.items():
-        old_colors[key] = curses.color_content(key)
-        logging.info('Old color: {} - {}'.format(key, old_colors))
-        r = int(value[0:2], 16) / 255 * 1000
-        g = int(value[2:4], 16) / 255 * 1000
-        b = int(value[4:6], 16) / 255 * 1000
-        curses.init_color(key, int(r), int(g), int(b))
-        logging.info('New color: {} - {}'.format(key, curses.color_content(key)))
-
-    curses.init_pair(1, 20, -1)  # red
-    curses.init_pair(2, 21, -1)  # green
-    curses.init_pair(3, 22, -1)  # blue
-    curses.init_pair(4, curses.COLOR_WHITE, -1)  # white
-    curses.init_pair(5, 23, -1)  # yellow
-    curses.init_pair(6, 24, -1)  # orange
-
-    return old_colors
-
-
-def reset_colors(old_colors):
-    """
-    Terminal colours are fubar unless we reset them!
-    """
-    for key, (r, g, b) in old_colors.items():
-        logging.info('{}, {}'.format(key, (r, g, b)))
-        curses.init_color(key, r, g, b)
-
 
 def main_loop(screen):
     """
@@ -240,14 +201,14 @@ def curses_gui(screen):
         sys.exit('Terminal does not support colors!')
         # TODO: Fall back to text mode
     else:
-        old_colors = init_colors()
+        old_colors = renderer.init_colors()
 
     curses.curs_set(0)  # Hide cursor
     # TODO: @rubiks_colors decorator. Coooool.
     main_loop(screen)
 
     if curses.has_colors():
-        reset_colors(old_colors)
+        renderer.reset_colors(old_colors)
 
 
 def main():
