@@ -49,10 +49,10 @@ class Cube(object):
     def generate(self):
         """ Generate our Cube by positioning stickers on all the faces. """
         faces = {
-            'left': ([-1.5], range(-1, 2), range(-1, 2), (-1, 0, 0), 'green'),
-            'right': ([1.5], range(-1, 2), range(-1, 2), (1, 0, 0), 'blue'),
-            'bottom': (range(-1, 2), [-1.5], range(-1, 2), (0, -1, 0), 'red'),
-            'top': (range(-1, 2), [1.5], range(-1, 2), (0, 1, 0), 'orange'),
+            'left': ([-1.5], range(-1, 2), range(-1, 2), (-1, 0, 0), 'blue'),
+            'right': ([1.5], range(-1, 2), range(-1, 2), (1, 0, 0), 'green'),
+            'bottom': (range(-1, 2), [-1.5], range(-1, 2), (0, -1, 0), 'orange'),
+            'top': (range(-1, 2), [1.5], range(-1, 2), (0, 1, 0), 'red'),
             'back': (range(-1, 2), range(-1, 2), [-1.5], (0, 0, -1), 'yellow'),
             'front': (range(-1, 2), range(-1, 2), [1.5], (0, 0, 1), 'white'),
         }
@@ -111,23 +111,29 @@ class Cube(object):
                 print(sticker)
         print('\n')
 
-    def render(self, screen):
+    def render(self, screen, projection='default'):
         """ Render ourself. """
         colors = (None, 'red', 'green', 'blue', 'white', 'yellow', 'orange')
+
+        normals = [(0, 0, 1), (-1, 0, 0), (1, 0, 0), (0, -1, 0), (0, 1, 0), (0, 0, -1)]
+        offsets = [(0, 0), (-4, 0), (4, 0), (0, -4), (0, 4), (8, 0)]
 
         height, width = screen.getmaxyx()
         x_offset, y_offset = int(width/2) - 1, int(height/2) - 1
 
         block_char = chr(0x2588)  # Python 3 only?
-        for sticker in self.stickers:
-            if sticker.is_visible(self.normal):
-                x, y, z = sticker.coords
-                j = int(x + x_offset)
-                i = int(y + y_offset)
-                pair_number = colors.index(sticker.color)
-                screen.attron(curses.color_pair(pair_number))
-                screen.addch(i, j, block_char)
-                screen.attroff(curses.color_pair(pair_number))
+        if projection == 'default':
+            normals = normals[:1]
+        for normal, offset in zip(normals, offsets):
+            for sticker in self.stickers:
+                if sticker.is_visible(normal):
+                    x, y, z = sticker.coords
+                    j = int(x + x_offset) + offset[0]
+                    i = int(y + y_offset) + offset[1]
+                    pair_number = colors.index(sticker.color)
+                    screen.attron(curses.color_pair(pair_number))
+                    screen.addch(i, j, block_char)
+                    screen.attroff(curses.color_pair(pair_number))
 
 
 def setup_logging():
