@@ -123,7 +123,7 @@ class Cube(object):
 
         block_char = chr(0x2588)  # Python 3 only?
         if projection == 'default':
-            normals = normals[:1]
+            normals = normals[:1]  # Only render the first normal
         for normal, offset in zip(normals, offsets):
             for sticker in self.stickers:
                 if sticker.is_visible(normal):
@@ -162,19 +162,19 @@ def main_loop(screen):
 
         key = screen.getkey()
         logging.info('key {}'.format(key))
-        if key == '1':  # Front view
-            projection = 'default'
-        elif key == '3':  # Orthographic projection view
-            projection = 'multi'
-        elif key == 'x':  # Rotate about x-axis
-            cube.rotate(0)
+        if key == '1':
+            projection = 'default'  # Front view
+        elif key == '3':
+            projection = 'multi'  # Orthographic projection view
+        elif key == 'x':
+            cube.rotate(0)  # Rotate about x-axis
         elif key == 'X':
-            cube.rotate(0, sign=-1)
-        elif key == 'y':  # Rotate about y-axis
+            cube.rotate(0, sign=-1)  # Rotate about x-axis in CCW direction
+        elif key == 'y':
             cube.rotate(1)
         elif key == 'Y':
             cube.rotate(1, sign=-1)
-        elif key == 'z':  # Rotate about z-axis
+        elif key == 'z':
             cube.rotate(2)
         elif key == 'Z':
             cube.rotate(2, sign=-1)
