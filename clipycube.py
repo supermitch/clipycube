@@ -153,13 +153,20 @@ def main_loop(screen):
     """
     cube = Cube()  # new cube
 
-    screen.box()  # Render window frame
+    projection = 'default'
     while True:
-        cube.render(screen)
+        screen.erase()
+        screen.box()
+        cube.render(screen, projection)
         screen.refresh()
 
         key = screen.getkey()
-        if key == 'x':  # Rotate about x-axis
+        logging.info('key {}'.format(key))
+        if key == '1':  # Front view
+            projection = 'default'
+        elif key == '3':  # Orthographic projection view
+            projection = 'multi'
+        elif key == 'x':  # Rotate about x-axis
             cube.rotate(0)
         elif key == 'X':
             cube.rotate(0, sign=-1)
