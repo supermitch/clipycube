@@ -28,3 +28,11 @@ def rotation(point, axis, sign=1):
     x, y, z = point  # Assumes 3D point or vector
     return R(x, y, z, theta)  # Calculate our new normal vector
 
+def cross_product(vector_a, vector_b):
+    """
+    Return the angles in (x, y, z) between two vectors.
+    """
+    a1, a2, a3 = vector_a
+    b1, b2, b3 = vector_b
+    return (a2 * b3 - a3 * b2, a3 * b1 - a1 * b3, a1 * b2 - a2 * b1)
+
