@@ -128,11 +128,11 @@ class Cube(object):
             for sticker in self.stickers:
                 if sticker.is_visible(normal):
                     x, y, z = sticker.coords
-                    j = int(x + x_offset) + offset[0]
-                    i = int(y + y_offset) + offset[1]
+                    i = int(x + x_offset + offset[0])
+                    j = int(y + y_offset + offset[1])
                     pair_number = colors.index(sticker.color)
                     screen.attron(curses.color_pair(pair_number))
-                    screen.addch(i, j, block_char)
+                    screen.addch(j, i, block_char)
                     screen.attroff(curses.color_pair(pair_number))
 
 
