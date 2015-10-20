@@ -116,7 +116,7 @@ class Cube(object):
         colors = (None, 'red', 'green', 'blue', 'white', 'yellow', 'orange')
 
         normals = [(0, 0, 1), (-1, 0, 0), (1, 0, 0), (0, -1, 0), (0, 1, 0), (0, 0, -1)]
-        offsets = [(0, 0), (-4, 0), (4, 0), (0, -4), (0, 4), (8, 0)]
+        offsets = [(0, 0), (-5, 0), (5, 0), (0, -5), (0, 5), (10, 0)]
 
         height, width = screen.getmaxyx()
         x_offset, y_offset = int(width/2) - 1, int(height/2) - 1
