@@ -124,10 +124,23 @@ class Cube(object):
         block_char = chr(0x2588)  # Python 3 only?
         if projection == 'default':
             normals = normals[:1]  # Only render the first normal
+        seen = set()
         for normal, offset in zip(normals, offsets):
             for sticker in self.stickers:
                 if sticker.is_visible(normal):
-                    x, y, z = sticker.coords
+                    angle = algebra.angle_between_vectors(normal, self.normal)
+                    perp = algebra.cross_product(normal, self.normal)
+                    if sticker.color not in seen:
+                        logging.info('color: {}, angle: {}, perp: {}'.format(sticker.color, angle, perp))
+                        seen.add(sticker.color)
+
+                    if 1 in perp or -1 in perp:
+                        rotation_axis = perp.index(1) if 1 in perp else perp.index(-1)
+                        sign = 1 if 1 in perp else -1
+                        new_coords = algebra.rotation(sticker.coords, rotation_axis, theta=angle, sign=sign)
+                        x, y, z = new_coords
+                    else:
+                        x, y, z = sticker.coords
                     i = int(x + x_offset + offset[0])
                     j = int(y + y_offset + offset[1])
                     pair_number = colors.index(sticker.color)
