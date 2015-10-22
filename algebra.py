@@ -37,6 +37,7 @@ def cross_product(vector_a, vector_b):
 
 def length(vector):
     """ Return length of a vector. """
+    a, b, c = vector
     return math.sqrt(a ** 2 + b ** 2 + c ** 2)
 
 
