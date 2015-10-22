@@ -4,7 +4,7 @@ Linear algebra is cool.
 import math
 
 
-def rotation(point, axis, sign=1):
+def rotation(point, axis, theta=None, sign=1):
     """ Rotate a point (or vector) about the origin in 3D space. """
     def Rx(x, y, z, theta):
         return (round(x, 1),
@@ -22,9 +22,10 @@ def rotation(point, axis, sign=1):
                 round(z, 1))
 
     R = {0: Rx, 1: Ry, 2: Rz}[axis]  # Select a rotation matrix depending on which axis
-    theta = sign * math.pi / 2  # Always 90 degrees
     x, y, z = point  # Assumes 3D point or vector
-    return R(x, y, z, theta)  # Calculate our new normal vector
+    if theta is None:
+        theta = math.pi/2
+    return R(x, y, z, sign * theta)  # Calculate our new normal vector
 
 
 def cross_product(vector_a, vector_b):

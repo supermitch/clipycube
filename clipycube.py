@@ -30,8 +30,8 @@ class Sticker(object):
 
     def rotate(self, axis, sign=1):
         """ Rotate this sticker in 3D space about the origin. """
-        self.normal = algebra.rotation(self.normal, axis, sign)
-        self.coords = algebra.rotation(self.coords, axis, sign)
+        self.normal = algebra.rotation(self.normal, axis, sign=sign)
+        self.coords = algebra.rotation(self.coords, axis, sign=sign)
 
     def __repr__(self):
         x, y, z = self.coords
