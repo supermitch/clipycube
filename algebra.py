@@ -28,11 +28,18 @@ def rotation(point, axis, theta=None, sign=1):
     return R(x, y, z, sign * theta)  # Calculate our new normal vector
 
 
-def cross_product(vector_a, vector_b):
-    """ Return the angles in (x, y, z) between two vectors. """
-    a1, a2, a3 = vector_a
-    b1, b2, b3 = vector_b
+def cross_product(a, b):
+    """ Return the angles in (x, y, z) between two vectors, a & b. """
+    a1, a2, a3 = a
+    b1, b2, b3 = b
     return (a2 * b3 - a3 * b2, a3 * b1 - a1 * b3, a1 * b2 - a2 * b1)
+
+
+def dot_product(a, b):
+    """ Return dot product between two vectors a & b. """
+    a1, a2, a3 = a
+    b1, b2, b3 = b
+    return a1 * b1 + a2 * b2 + a3 * b3
 
 
 def length(vector):
@@ -48,3 +55,9 @@ def direction_cosines(vector):
     beta = math.acos(b/length(vector))
     gamma = math.acos(c/length(vector))
     return alpha, beta, gamma
+
+
+def angle_between_vectors(a, b):
+    """ Return the angle between two vectors. """
+    return math.acos(dot_product(a, b) / (length(a) * length(b)))
+
