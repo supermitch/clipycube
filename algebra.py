@@ -48,15 +48,6 @@ def length(vector):
     return math.sqrt(a ** 2 + b ** 2 + c ** 2)
 
 
-def direction_cosines(vector):
-    """ Returns direction cosines for a given vector. """
-    a, b, c = vector
-    alpha = math.acos(a/length(vector))
-    beta = math.acos(b/length(vector))
-    gamma = math.acos(c/length(vector))
-    return alpha, beta, gamma
-
-
 def angle_between_vectors(a, b):
     """ Return the angle between two vectors. """
     return math.acos(dot_product(a, b) / (length(a) * length(b)))
