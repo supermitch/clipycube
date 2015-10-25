@@ -70,9 +70,7 @@ class Cube(object):
             sticker.rotate(axis, sign)
 
     def twist(self, plane, sign=1):
-        """
-        Spin a plane of the cube.
-        """
+        """ Spin a plane of the cube. """
         twist = {  # plane: (comparison function, axis),
             'top': (operator.gt, 1),
             'middle': (operator.eq, 1),
@@ -122,25 +120,24 @@ class Cube(object):
         x_offset, y_offset = int(width/2) - 1, int(height/2) - 1
 
         block_char = chr(0x2588)  # Python 3 only?
+
         if projection == 'default':
             normals = normals[:1]  # Only render the first normal
-        seen = set()
+
         for normal, offset in zip(normals, offsets):
             for sticker in self.stickers:
                 if sticker.is_visible(normal):
                     angle = algebra.angle_between_vectors(normal, self.normal)
                     perp = algebra.cross_product(normal, self.normal)
-                    if sticker.color not in seen:
-                        logging.info('color: {}, angle: {}, perp: {}'.format(sticker.color, angle, perp))
-                        seen.add(sticker.color)
 
-                    if 1 in perp or -1 in perp:
+                    if perp != (0, 0, 0):
                         rotation_axis = perp.index(1) if 1 in perp else perp.index(-1)
                         sign = 1 if 1 in perp else -1
                         new_coords = algebra.rotation(sticker.coords, rotation_axis, theta=angle, sign=sign)
                         x, y, z = new_coords
                     else:
                         x, y, z = sticker.coords
+
                     i = int(x + x_offset + offset[0])
                     j = int(y + y_offset + offset[1])
                     pair_number = colors.index(sticker.color)
@@ -150,9 +147,7 @@ class Cube(object):
 
 
 def setup_logging():
-    """
-    Set up log folder and configure logger.
-    """
+    """ Set up log folder and configure logger. """
     root = os.path.dirname(os.path.abspath(__file__))
     log_dir = os.path.join(root, 'log')
     if not os.path.exists(log_dir):
@@ -161,9 +156,7 @@ def setup_logging():
 
 
 def main_loop(screen):
-    """
-    Run the main game loop.
-    """
+    """ Run the main game loop. """
     cube = Cube()  # new cube
 
     projection = 'default'
