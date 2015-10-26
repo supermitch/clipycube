@@ -1,13 +1,15 @@
-root = path.abspath(path.dirname(__file__))
+import os.path
+
+root = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(root, 'README.rst'), encoding='utf-8') as f:
+with open(os.path.join(root, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
     name='clipycube',
     version='1.0.0',
-    description="Command line Rubiks' cube",
+    description="Command line Rubik's cube",
     long_description=long_description,
     author='Mitch LeBlanc',
     author_email='supermitch@gmail.com',
@@ -17,11 +19,11 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
-        'Intended Audience :: Users',
-        'Topic :: Software Development :: Build Tools',
+        'Intended Audience :: End Users/Desktop',
+        'Topic :: Games/Entertainment :: Puzzle Games',
 
         # Pick your license as you wish (should match "license" above)
          'License :: OSI Approved :: MIT License',
@@ -36,5 +38,5 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
     ],
-    keywords='sample setuptools development',
+    keywords='commandline Rubiks cube',
 )
