@@ -155,15 +155,25 @@ def setup_logging():
     logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
 
 
+def add_help_strings(screen):
+    """ Display keyboard shortcuts when F1 is pressed. """
+    screen.addstr(10, 10, 'F1 - Hide keyboard shortcuts')
+    screen.addstr(12, 10, '1 - Show single (front) view')
+    screen.addstr(13, 10, '3 - Show orthographic (3rd angle) projection view')
+
+
 def main_loop(screen):
     """ Run the main game loop. """
     cube = Cube()  # new cube
 
     projection = 'default'
+    show_help = True
     while True:
         screen.erase()
         screen.box()
         cube.render(screen, projection)
+        if show_help:
+            add_help_strings(screen)
         screen.refresh()
 
         key = screen.getkey()
