@@ -168,7 +168,9 @@ def main_loop(screen):
 
         key = screen.getkey()
         logging.info('key {}'.format(key))
-        if key == '1':
+        if key == 'KEY_F(1)':
+            show_help = not show_help
+        elif key == '1':
             projection = 'default'  # Front view
         elif key == '3':
             projection = 'multi'  # Orthographic projection view
