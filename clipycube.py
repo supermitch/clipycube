@@ -157,9 +157,30 @@ def setup_logging():
 
 def add_help_strings(screen):
     """ Display keyboard shortcuts when F1 is pressed. """
-    screen.addstr(10, 10, 'F1 - Hide keyboard shortcuts')
-    screen.addstr(12, 10, '1 - Show single (front) view')
-    screen.addstr(13, 10, '3 - Show orthographic (3rd angle) projection view')
+    start, col = 3, 5
+    strings = [
+        'F1 - Show/hide help',
+        'q - Quit',
+        '1 - Show single (front) view',
+        '3 - Show orthographic (3rd angle) projection view',
+        's - Scramble',
+        'S - Solve (reset)',
+        '',
+        'x/X - Rotate about x-axis',
+        'y/Y - Rotate about y-axis',
+        'z/Z - Rotate about z-axis',
+        '',
+        'h/H - Twist left plane',
+        'm/M - Twist center plane',
+        'l/L - Twist right plane',
+        '',
+        'j/J - Twist bottom plane',
+        'i/I - Twist middle plane',
+        'k/K - Twist Top plane',
+    ]
+    for row, string in enumerate(strings, start=start):
+        if string:
+            screen.addstr(row, col, string)
 
 
 def main_loop(screen):
