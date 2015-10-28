@@ -159,28 +159,29 @@ def add_help_strings(screen):
     """ Display keyboard shortcuts when F1 is pressed. """
     start, col = 3, 5
     strings = [
-        'F1 - Show/hide help',
-        'q - Quit',
-        '1 - Show single (front) view',
-        '3 - Show orthographic (3rd angle) projection view',
-        's - Scramble',
-        'S - Solve (reset)',
-        '',
-        'x/X - Rotate about x-axis',
-        'y/Y - Rotate about y-axis',
-        'z/Z - Rotate about z-axis',
-        '',
-        'h/H - Twist left plane',
-        'm/M - Twist center plane',
-        'l/L - Twist right plane',
-        '',
-        'j/J - Twist bottom plane',
-        'i/I - Twist middle plane',
-        'k/K - Twist Top plane',
+        ('F1', 'Show/hide help'),
+        ('q', 'Quit'),
+        ('1', 'Show single (front) view'),
+        ('3', 'Show orthographic (3rd angle) projection view'),
+        ('s', 'Scramble'),
+        ('S', 'Solve (reset)'),
+        ('', ''),
+        ('x/X', 'Rotate about x-axis'),
+        ('y/Y', 'Rotate about y-axis'),
+        ('z/Z', 'Rotate about z-axis'),
+        ('', ''),
+        ('h/H', 'Twist left plane'),
+        ('m/M', 'Twist center plane'),
+        ('l/L', 'Twist right plane'),
+        ('', ''),
+        ('j/J', 'Twist bottom plane'),
+        ('i/I', 'Twist middle plane'),
+        ('k/K', 'Twist Top plane'),
     ]
     for row, string in enumerate(strings, start=start):
         if string:
-            screen.addstr(row, col, string)
+            screen.addstr(row, col, string[0], curses.A_BOLD)
+            screen.addstr(row, col + 4, string[1])
 
 
 def main_loop(screen):
