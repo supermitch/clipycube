@@ -13,6 +13,7 @@ setup(
     long_description=long_description,
     author='Mitch LeBlanc',
     author_email='supermitch@gmail.com',
+    url = 'https://github.com/supermitch/clipycube',
     license='MIT',
     classifiers=[
         # How mature is this project? Common values are
