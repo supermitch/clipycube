@@ -20,10 +20,10 @@ def setup_logging():
     logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
 
 
-def main_loop(screen):
+def main_loop(screen, code):
     """ Run the main game loop. """
     cube = Cube()
-    the_renderer = renderer.Renderer(screen)
+    the_renderer = renderer.Renderer(screen, code)
 
     projection = 'default'
     show_help = True
@@ -92,6 +92,7 @@ def main_loop(screen):
 def curses_gui(screen):
     locale.setlocale(locale.LC_ALL, '')
     code = locale.getpreferredencoding()
+    print('Encoding: {}'.format(code))
 
     curses.use_default_colors()
     curses.start_color()  # Start colour mode
@@ -103,7 +104,7 @@ def curses_gui(screen):
 
     curses.curs_set(0)  # Hide cursor
     # TODO: @rubiks_colors decorator. Coooool.
-    main_loop(screen)
+    main_loop(screen, code)
 
     if curses.has_colors():
         renderer.reset_colors(old_colors)

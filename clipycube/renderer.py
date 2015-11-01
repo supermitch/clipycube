@@ -9,8 +9,9 @@ import algebra  # TODO: Major no-no. Move this to Cube.
 
 class Renderer(object):
 
-    def __init__(self, screen):
+    def __init__(self, screen, encoding):
         self.screen = screen
+        self.encoding = encoding
         self.view_normal = (0, 0, 1)  # + z-axis, outwards of screen
 
     def add_help_strings(self):
