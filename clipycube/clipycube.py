@@ -252,17 +252,6 @@ def main_loop(screen):
     screen.refresh()
 
 
-def game():
-    """
-    """
-    cube = Cube()  # new cube
-    cube.show()
-    cube.rotate(0)
-    cube.show()
-    cube.twist('top')
-    cube.show()
-
-
 def curses_gui(screen):
     locale.setlocale(locale.LC_ALL, '')
     code = locale.getpreferredencoding()
@@ -285,11 +274,7 @@ def curses_gui(screen):
 
 def main():
     setup_logging()
-
-    if len(sys.argv) > 1 and sys.argv[1] == 'ui':
-        curses.wrapper(curses_gui)
-    else:
-        game()
+    curses.wrapper(curses_gui)
 
 
 if __name__ == '__main__':
