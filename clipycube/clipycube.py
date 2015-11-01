@@ -4,146 +4,11 @@ import curses
 import itertools
 import locale
 import logging
-import operator
 import os
-import random
 import sys
 
-import algebra
+from cube import Cube
 import renderer
-
-
-class Sticker(object):
-    """
-    A sticker object. There are 9 on each face of the cube.
-    Think of it like a sprite that can be moved and rendered.
-    """
-    def __init__(self, x, y, z, normal, color):
-        """ Initialize position, orientation, and color. """
-        self.coords = x, y, z
-        self.normal = normal  # Normal vector
-        self.color = color
-
-    def is_visible(self, vector):
-        """ Is this sticker visible along a given vector. """
-        return self.normal == vector
-
-    def rotate(self, axis, sign=1):
-        """ Rotate this sticker in 3D space about the origin. """
-        self.normal = algebra.rotation(self.normal, axis, sign=sign)
-        self.coords = algebra.rotation(self.coords, axis, sign=sign)
-
-    def __repr__(self):
-        x, y, z = self.coords
-        return 'Sticker({}, {}, {}, {}, {})'.format(x, y, z, self.normal, self.color)
-
-
-class Cube(object):
-    """ A Rubik's cube object. """
-
-    def __init__(self):
-        self.normal = (0, 0, 1)  # Our view normal. Doesn't change.
-        self.stickers = self.generate()
-        self.scramble()
-
-    def generate(self):
-        """ Generate our Cube by positioning stickers on all the faces. """
-        faces = {
-            'left': ([-1.5], range(-1, 2), range(-1, 2), (-1, 0, 0), 'blue'),
-            'right': ([1.5], range(-1, 2), range(-1, 2), (1, 0, 0), 'green'),
-            'bottom': (range(-1, 2), [-1.5], range(-1, 2), (0, -1, 0), 'orange'),
-            'top': (range(-1, 2), [1.5], range(-1, 2), (0, 1, 0), 'red'),
-            'back': (range(-1, 2), range(-1, 2), [-1.5], (0, 0, -1), 'yellow'),
-            'front': (range(-1, 2), range(-1, 2), [1.5], (0, 0, 1), 'white'),
-        }
-        stickers = []
-        for xs, ys, zs, normal, color in faces.values():
-            for x in xs:
-                for y in ys:
-                    for z in zs:
-                        stickers.append(Sticker(x, y, z, normal, color))
-        return stickers
-
-    def rotate(self, axis, sign=1):
-        """ Reorient our cube by rotation about an axis. """
-        for sticker in self.stickers:
-            sticker.rotate(axis, sign)
-
-    def twist(self, plane, sign=1):
-        """ Spin a plane of the cube. """
-        twist = {  # plane: (comparison function, axis),
-            'top': (operator.gt, 1),
-            'middle': (operator.eq, 1),
-            'bottom': (operator.lt, 1),
-            'right': (operator.gt, 0),
-            'center': (operator.eq, 0),
-            'left': (operator.lt, 0),
-        }
-        comparison, axis = twist[plane]
-        for sticker in self.stickers:
-            if comparison(sticker.coords[axis], 0):  # Only rotate stickers in the selected plane
-                sticker.rotate(axis, sign)
-
-    def scramble(self):
-        """ Scramble our faces. """
-        planes = ['top', 'middle', 'bottom', 'right', 'center', 'left']
-        for _ in range(3000):
-            self.twist(random.choice(planes))
-
-    def solve(self):
-        """ Put the cube in the initial ('solved') state. """
-        self.stickers = self.generate()
-
-    def describe(self):
-        """ Describe the cube's entire current layout. """
-        print('Cube:')
-        for sticker in self.stickers:
-            print(sticker)
-        print('\n')
-
-    def show(self):
-        """ Print the currently displayed face. """
-        print('Front:')
-        for sticker in self.stickers:
-            if sticker.is_visible(self.normal):
-                print(sticker)
-        print('\n')
-
-    def render(self, screen, projection='default'):
-        """ Render ourself. """
-        colors = (None, 'red', 'green', 'blue', 'white', 'yellow', 'orange')
-
-        normals = [(0, 0, 1), (-1, 0, 0), (1, 0, 0), (0, -1, 0), (0, 1, 0), (0, 0, -1)]
-        offsets = [(0, 0), (-4, 0), (4, 0), (0, -4), (0, 4), (8, 0)]
-
-        height, width = screen.getmaxyx()
-        x_offset, y_offset = int(width/2) - 1, int(height/2) - 1
-
-        block_char = chr(0x2588)  # Python 3 only?
-
-        if projection == 'default':
-            normals = normals[:1]  # Only render the first normal
-
-        for normal, offset in zip(normals, offsets):
-            for sticker in self.stickers:
-                if sticker.is_visible(normal):
-                    angle = algebra.angle_between_vectors(normal, self.normal)
-                    perp = algebra.cross_product(normal, self.normal)
-
-                    if perp != (0, 0, 0):
-                        rotation_axis = perp.index(1) if 1 in perp else perp.index(-1)
-                        sign = 1 if 1 in perp else -1
-                        new_coords = algebra.rotation(sticker.coords, rotation_axis, theta=angle, sign=sign)
-                        x, y, z = new_coords
-                    else:
-                        x, y, z = sticker.coords
-
-                    i = int(x + x_offset + offset[0])
-                    j = int(y + y_offset + offset[1])
-                    pair_number = colors.index(sticker.color)
-                    screen.attron(curses.color_pair(pair_number))
-                    screen.addch(j, i, block_char)
-                    screen.attroff(curses.color_pair(pair_number))
 
 
 def setup_logging():
@@ -155,51 +20,23 @@ def setup_logging():
     logging.basicConfig(filename='log/clipycube.log', filemode='w', level=logging.DEBUG)
 
 
-def add_help_strings(screen):
-    """ Display keyboard shortcuts when F1 is pressed. """
-    start, col = 3, 5
-    strings = [
-        ('F1', 'Show/hide help'),
-        ('q', 'Quit'),
-        ('1', 'Show single (front) view'),
-        ('3', 'Show orthographic (3rd angle) projection view'),
-        ('s', 'Scramble'),
-        ('S', 'Solve (reset)'),
-        ('', ''),
-        ('x/X', 'Rotate about x-axis'),
-        ('y/Y', 'Rotate about y-axis'),
-        ('z/Z', 'Rotate about z-axis'),
-        ('', ''),
-        ('h/H', 'Twist left plane'),
-        ('m/M', 'Twist center plane'),
-        ('l/L', 'Twist right plane'),
-        ('', ''),
-        ('j/J', 'Twist bottom plane'),
-        ('i/I', 'Twist middle plane'),
-        ('k/K', 'Twist Top plane'),
-    ]
-    for row, string in enumerate(strings, start=start):
-        if string:
-            screen.addstr(row, col, string[0], curses.A_BOLD)
-            screen.addstr(row, col + 4, string[1])
-
-
 def main_loop(screen):
     """ Run the main game loop. """
-    cube = Cube()  # new cube
+    cube = Cube()
+    the_renderer = renderer.Renderer(screen)
 
     projection = 'default'
     show_help = True
     while True:
         screen.erase()
         screen.box()
-        cube.render(screen, projection)
+        the_renderer.render(cube, projection)
         if show_help:
-            add_help_strings(screen)
+            the_renderer.add_help_strings()
         screen.refresh()
 
         key = screen.getkey()
-        logging.info('key {}'.format(key))
+        logging.debug('Key press {}'.format(key))
         if key == 'KEY_F(1)':
             show_help = not show_help
         elif key == '1':
@@ -274,7 +111,7 @@ def curses_gui(screen):
 
 def main():
     setup_logging()
-    curses.wrapper(curses_gui)
+    curses.wrapper(curses_gui)  # Wrapper will fix terminal on exceptions
 
 
 if __name__ == '__main__':
