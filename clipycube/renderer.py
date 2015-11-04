@@ -2,6 +2,7 @@
 The curses related rendering stuff.
 """
 import curses
+import locale
 import logging
 
 import algebra  # TODO: Major no-no. Move this to Cube.
@@ -9,9 +10,9 @@ import algebra  # TODO: Major no-no. Move this to Cube.
 
 class Renderer(object):
 
-    def __init__(self, screen, encoding):
+    def __init__(self, screen):
         self.screen = screen
-        self.encoding = encoding
+        self.encoding = locale.getpreferredencoding()
         self.view_normal = (0, 0, 1)  # + z-axis, outwards of screen
 
     def add_help_strings(self):
@@ -52,8 +53,6 @@ class Renderer(object):
         height, width = self.screen.getmaxyx()
         x_offset, y_offset = int(width/2) - 1, int(height/2) - 1
 
-        block_char = chr(0x2588)  # Python 3 only?
-
         if projection == 'default':
             normals = normals[:1]  # Only render the first normal
 
@@ -75,7 +74,7 @@ class Renderer(object):
                     j = int(y + y_offset + offset[1])
                     pair_number = colors.index(sticker.color)
                     self.screen.attron(curses.color_pair(pair_number))
-                    self.screen.addch(j, i, block_char)
+                    self.screen.addstr(j, i, u'\u2588'.encode(self.encoding))
                     self.screen.attroff(curses.color_pair(pair_number))
 
 

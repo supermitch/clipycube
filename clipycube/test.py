@@ -8,17 +8,13 @@ def main(screen):
         screen.box()
         screen.addch(10, 10, ord('a'))
         screen.addch(0x40007b)
-        screen.addch(0x02588)
-        screen.addch(0x9608)
         screen.addstr("Pretty text")
         screen.addstr('Ω')
-        screen.addstr('█')
+        screen.addstr(20, 20, '█')
 
-        u = unichr(0x2588) + unichr(0x03A9)  # Block & Capital Omega
-        screen.addstr(code)
-        u.encode(code)
-
-        screen.addstr(u.encode(code))  # UnicodeEncodeError: 'ascii' codec can't encode u'\u2588'
+        # u = unichr(0x2588) + unichr(0x03A9)  # Block & Capital Omega
+        # screen.addstr(code)
+        # screen.addstr(u.encode(code))  # UnicodeEncodeError: 'ascii' codec can't encode u'\u2588'
 
         s = u"\u2588 \u03A9".encode(code)
         screen.addstr(s)
