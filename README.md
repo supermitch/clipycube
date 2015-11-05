@@ -4,12 +4,12 @@ CLI based Rubiks Cube in Python.
 
 ## Requirements
 
-Currently requires Python 3.x to run. This will change.
+Should run identically in both Python 2.x and 3.x!
 
 ## Run
 
 ```shell
-$ python3.4 clipycube
+$ python clipycube
 ```
 
 ## Keyboard Shortcuts:
