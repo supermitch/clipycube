@@ -1,6 +1,7 @@
 """
 The curses related rendering stuff.
 """
+from __future__ import division
 import curses
 import locale
 import logging
