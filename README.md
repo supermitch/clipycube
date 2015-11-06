@@ -9,7 +9,7 @@ Should run identically in both Python 2.x and 3.x!
 ## Run
 
 ```shell
-$ python clipycube
+$ python clipycube.py
 ```
 
 ## Keyboard Shortcuts:
