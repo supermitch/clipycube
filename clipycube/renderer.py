@@ -44,6 +44,9 @@ class Renderer(object):
                 self.screen.addstr(row, col, string[0], curses.A_BOLD)
                 self.screen.addstr(row, col + 4, string[1])
 
+    def add_solved_string(self):
+        self.screen.addstr(1, 20, 'YOU SOLVED THE CUBE!!')
+
     def render(self, cube, projection='default'):
         """ Render ourself. """
         colors = (None, 'red', 'green', 'blue', 'white', 'yellow', 'orange')

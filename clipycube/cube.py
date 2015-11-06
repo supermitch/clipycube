@@ -1,3 +1,4 @@
+import collections
 import operator
 import random
 
@@ -10,6 +11,7 @@ class Cube(object):
     def __init__(self):
         self.stickers = self.generate()
         self.scramble()
+        self.solved = False
 
     def generate(self):
         """ Generate our Cube by positioning stickers on all the faces. """
@@ -48,16 +50,27 @@ class Cube(object):
         for sticker in self.stickers:
             if comparison(sticker.coords[axis], 0):  # Only rotate stickers in the selected plane
                 sticker.rotate(axis, sign)
+        self.solved = self.verify_solution()
 
     def scramble(self):
         """ Scramble our faces. """
         planes = ['top', 'middle', 'bottom', 'right', 'center', 'left']
         for _ in range(3000):
             self.twist(random.choice(planes))
+        self.solved = False
 
     def solve(self):
         """ Put the cube in the initial ('solved') state. """
         self.stickers = self.generate()
+
+    def verify_solution(self):
+        """ Check if all the stickers on all the faces are the same color. """
+        faces = collections.defaultdict(set)
+        for sticker in self.stickers:
+            faces[sticker.normal].add(sticker.color)
+            if len(faces[sticker.normal]) > 1:
+                return False
+        return True
 
     def describe(self):
         """ Describe the cube's entire current layout. """

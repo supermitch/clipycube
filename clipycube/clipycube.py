@@ -33,6 +33,8 @@ def main_loop(screen):
         the_renderer.render(cube, projection)
         if show_help:
             the_renderer.add_help_strings()
+        if cube.solved:
+            the_renderer.add_solved_string()
         screen.refresh()
 
         key = screen.getkey()
